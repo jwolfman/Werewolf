@@ -17,22 +17,42 @@
     <div id="main" class="container">
         <div class="row">
             <div id="roleHolder" class="col-xs-3 container-fluid">
-                <div id="roleImage" class="row col-lg-12"></div>
-                <div id="roleExplanation" class="row col-lg-12"></div>
+                <div id="roleName" class="row col-lg-12">
+                    <h3>Temp Name</h3>
+                </div>
+                <div id="roleImage" class="row col-lg-12">
+                    <!--img src="" class="img-rounded img-responsive" alt=""-->
+                    role image goes here
+                </div>
+                <div id="roleExplanation" class="row col-lg-12">
+                    <p>
+                        role explanation here
+                    </p>
+                </div>
             </div>
             <div id="chatHolder" class="col-xs-6 container">
                 <div class="chat row"></div>
                 <div class="row">
-                    <form class="textEntry row">
-                        <!--not displaying properly, will fix later-->
-                        <input class="col-xs-1 form-control" type="text" autocomplete="off" id="message">
-                        <button type="submit" class="btn col-xs-2">Send</button>
+                    <form class="textEntry">
+                        <input class="col-xs-9" type="text" autocomplete="off" id="message">
+                        <button type="submit" class="col-xs-3 btn">Send</button>
                     </form>
                 </div>
             </div>
             <div id="users" class="col-xs-3">
                 <table id="userTable" class="table table-hover table-condensed">
-
+                    <thead>
+                        <tr>
+                            <th>Player Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>Alive</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>

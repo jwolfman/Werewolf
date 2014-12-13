@@ -1,3 +1,15 @@
+/*@font-face {
+    font-family: ;
+    src: url();
+    /*because custom fonts, possibilities include:
+    http://www.dafont.com/october-crow.font?fpp=100
+    http://www.dafont.com/gypsy-curse.font?fpp=100
+    http://www.dafont.com/lycanthrope.font?fpp=100
+    http://www.dafont.com/about-dead.font?fpp=100
+    http://www.dafont.com/dire-wolf.font?fpp=100 (the only not 100% free font, would only become problematic if we were to make a profit)
+    http://www.dafont.com/savage3.font?fpp=100
+    *
+}*/
 body{
     font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
     font-size:12px;
@@ -12,6 +24,19 @@ body{
     border-right: solid 2px;
     height: 85%;
 }
+#roleName{
+    height: 10%;
+    border-bottom: solid 2px;
+}
+#roleImage{
+    height: 50%;
+    border-bottom: solid 2px;
+}
+#roleExplanation{
+    height: 40%;
+    overflow-y:auto;
+
+}
 #chatHolder{
     height: 85%;
     border-right: solid 2px;
@@ -19,10 +44,14 @@ body{
 .chat{
     height: 70%;
     border-bottom: solid 2px;
+    overflow-y: auto;
 }
 .textEntry{
     height: 30%;
-    background: #000000;
 }
 #message{
+    height: 100%;
+}
+.textEntry button{
+    height: 100%;
 }
