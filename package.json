@@ -1,0 +1,24 @@
+{
+  "name": "Werewolf",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "express": "~4.10.4",
+    "ejs": "~0.8.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jwolfman/Werewolf.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/jwolfman/Werewolf/issues"
+  },
+  "homepage": "https://github.com/jwolfman/Werewolf"
+}
