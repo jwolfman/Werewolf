@@ -1,22 +1,42 @@
 <html>
 <head>
-    <link rel="stylesheet" href="/public/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-<div id="menus">
-</div>
-<div id="tabs">
-</div>
-<div id="chatHolder">
-    <div class="chat"></div>
-    <form class="textEntry">
-        <input class="message" type="text" autocomplete="off">
-        <button type="submit">Send</button>
-    </form>
-</div>
-<div id="users">
+<div class="container fixed">
+    <!--not sure if there's any need for a menu bar, could easily become a tab bar for the chats accessible-->
+    <div id="menus">
+        <ul class="nav nav-tabs">
+            <li><a href="#">Item 1</a></li>
+            <li><a href="#">Item 2</a></li>
+        </ul>
+    </div>
+    <div id="main" class="container">
+        <div class="row">
+            <div id="roleHolder" class="col-xs-3 container-fluid">
+                <div id="roleImage" class="row col-lg-12"></div>
+                <div id="roleExplanation" class="row col-lg-12"></div>
+            </div>
+            <div id="chatHolder" class="col-xs-6 container">
+                <div class="chat row"></div>
+                <div class="row">
+                    <form class="textEntry row">
+                        <!--not displaying properly, will fix later-->
+                        <input class="col-xs-1 form-control" type="text" autocomplete="off" id="message">
+                        <button type="submit" class="btn col-xs-2">Send</button>
+                    </form>
+                </div>
+            </div>
+            <div id="users" class="col-xs-3">
+                <table id="userTable" class="table table-hover table-condensed">
+
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

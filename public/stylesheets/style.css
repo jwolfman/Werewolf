@@ -1,0 +1,28 @@
+body{
+    font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+    font-size:12px;
+    border-color: #7d1818;
+}
+#menus{
+}
+#main{
+    border: solid 2px;
+}
+#roleHolder{
+    border-right: solid 2px;
+    height: 85%;
+}
+#chatHolder{
+    height: 85%;
+    border-right: solid 2px;
+}
+.chat{
+    height: 70%;
+    border-bottom: solid 2px;
+}
+.textEntry{
+    height: 30%;
+    background: #000000;
+}
+#message{
+}
