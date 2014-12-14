@@ -1,9 +1,9 @@
 <html>
 <head>
-    <link rel="stylesheet" href="/stylesheets/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/public/stylesheets/dist/css/bootstrap-theme.min.css">
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://cdn.socket.io/socket.io-1.2.1.js"></script>
+    <script src="/public/js/chat.js"></script>
 </head>
 <body>
 <div class="container fixed">
@@ -41,6 +41,7 @@
             </div>
             <div id="users" class="col-xs-3">
                 <table id="userTable" class="table table-hover table-condensed">
+                    <div id="#messages"> </div>
                     <thead>
                         <tr>
                             <th>Player Name</th>
