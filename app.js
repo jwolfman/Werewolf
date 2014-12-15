@@ -5,6 +5,7 @@ var app = express();
 var roleModule = require('./src/roles/roles.js');
 var server=http.createServer(app);
 var io = require('socket.io')(server);
+exports.io = io;
 app.set('port', 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -18,15 +19,8 @@ app.get("/moderator",function(req,res){
     res.render("moderator.ejs", {roles:roleModule.gameRoles });
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-});
-
+var chatServer = require("./chatServer.js");
 
 server.listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
 });
-
