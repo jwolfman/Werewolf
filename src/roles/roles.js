@@ -53,6 +53,17 @@ var gameRoles = {
         onDeath:"false",
         special:"true",
         onAttack:"false"
+    },
+    cupid:{
+        name:"Cupid",
+        team:"Village",
+        nightRole:"false",
+        firstNight:"true",
+        value:"-3",
+        image:"",
+        onDeath:"false",
+        special:"true",
+        onAttack:"false"
     }
 };
 exports.gameRoles = gameRoles;
