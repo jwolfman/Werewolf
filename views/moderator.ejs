@@ -6,7 +6,7 @@
 </head>
 <body>
 <form action="start_game.js">
-    <ul>
+    <ul id="roleDistribution">
         <% for (role in roles) {%>
         <li>  <%= role %>:<input type="number" name="quantity<%= role %>" min="0" value="0"/> </li>
         <%}%>
