@@ -64,6 +64,17 @@ var gameRoles = {
         onDeath:"false",
         special:"true",
         onAttack:"false"
+    },
+    hunter:{
+        name:"Hunter",
+        team:"Village",
+        nightRole:"false",
+        firstNight:"false",
+        value:"3",
+        image:"",
+        onDeath:"true",
+        special:"true",
+        onAttack:"false"
     }
 };
 exports.gameRoles = gameRoles;
