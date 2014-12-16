@@ -5,7 +5,7 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-<form action="start_game.js">
+<form class="roleSelection" action="start_game.js">
     <ul id="roleDistribution">
         <% for (role in roles) {%>
         <li>  <%= role %>:<input type="number" name="quantity<%= role %>" min="0" value="0"/> </li>

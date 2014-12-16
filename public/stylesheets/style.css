@@ -55,3 +55,7 @@ body{
 .textEntry button{
     height: 100%;
 }
+#userTable{
+    height: 60%;
+    border-bottom: solid 2px;
+}

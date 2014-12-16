@@ -1,3 +1,4 @@
+jQuery(document).on("submit","form.roleSelection",initGame());
 function initGame(){
     var roles=$("#roleDistribution");
     var roleDistribution=[roles.length];
