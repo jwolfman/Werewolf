@@ -2,19 +2,19 @@ var socket = io.connect('http://localhost:3000');
 var players;
 
 function submitUsername() {
-    socket.emit('user connect', $("#username-input").val());
+    name = $("#username-input").val();
+    socket.emit('user connect', name);
+    //TODO: Check if it's valid name!
     $("#username-dialog").hide();
 }
 
 
-$('form').submit(function(){
-    socket.emit('chat message', $('#m').val());
-    $('#m').val('');
-    return false;
-});
+function sendMessage (){
+    socket.emit('user chat message', JSON.stringify({sender:name, text:$('#player-message').val()}));
+}
     
 socket.on('chat message', function(msg){
-    $('#messages').append($('<li>').text(msg));
+    $('#message-list').append("<li>" + msg + "</li>");
 });
 
 socket.on('update users', function(playerString) {

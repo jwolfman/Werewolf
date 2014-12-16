@@ -19,7 +19,7 @@ app.get("/moderator",function(req,res){
     res.render("moderator.ejs", {roles:roleModule.gameRoles });
 });
 
-var chatServer = require("./chatServer.js");
+var chatServer = require("./src/chatServer.js");
 
 server.listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));

@@ -49,15 +49,13 @@
             <div id="chatHolder" class="col-xs-6 container">
                 <div class="chat row"></div>
                 <div class="row">
-                    <form class="textEntry">
-                        <input class="col-xs-9" type="text" autocomplete="off" id="message">
-                        <button type="submit" class="col-xs-3 btn">Send</button>
-                    </form>
+                        <input class="col-xs-9" type="text" autocomplete="off" id="player-message">
+                        <button type="submit" onclick="sendMessage()" class="col-xs-3 btn">Send</button>
                 </div>
+                    <div id="messages"> <ul id="message-list"> </ul></div>
             </div>
             <div id="users" class="col-xs-3">
                 <table id="userTable" class="table table-hover table-condensed">
-                    <div id="#messages"> </div>
                     <thead>
                         <tr>
                             <th>Player Name</th>
