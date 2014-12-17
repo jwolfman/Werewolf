@@ -1,4 +1,4 @@
-jQuery(document).on("submit","form.roleSelection",initGame());
+var userList=new Array();
 function initGame(){
     var roles=$("#roleDistribution");
     var roleDistribution=[roles.length];
@@ -19,7 +19,7 @@ function initGame(){
 function shuffle(roles){
     for(var c=0;c<roles.length;c++){
         var temp=roles[c];
-        var num=Math.floor((Math.random()*roles.length)+i);
+        var num=Math.floor((Math.random()*roles.length)+c);
         roles[c]=roles[num];
         roles[num]=temp;
     }
