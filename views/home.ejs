@@ -1,11 +1,31 @@
 <html>
 <head>
-    <link rel="stylesheet" href="/public/stylesheets/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/public/stylesheets/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/stylesheets/style.css">
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://cdn.socket.io/socket.io-1.2.1.js"></script>
-    <script src="/public/js/chat.js"></script>
+    <script src="/public/stylesheets/dist/js/bootstrap.min.js"></script>
+    <script src="/public/js/lib/jquery.simplemodal.1.4.4.min.js"></script>
+    <script src="/public/js/roles.js"></script>
+    <script src="/public/js/user.js"></script>
+    <script src="/public/js/game.js"></script>
+    <script src="/public/js/src/chat.js"></script>
 </head>
 <body>
+ <div id="username-dialog" class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">What is your name?</h4>
+      </div>
+      <div class ="form-group">
+        <input type="text" id="username-input" class="form-control"></input>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="submitUsername()" class="btn btn-primary" > Submit</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 <div class="container fixed">
     <!--not sure if there's any need for a menu bar, could easily become a tab bar for the chats accessible-->
     <div id="menus">
@@ -31,7 +51,9 @@
                 </div>
             </div>
             <div id="chatHolder" class="col-xs-6 container">
-                <div class="chat row"></div>
+                <div class="chat row">
+                    <div id="#messages"></div>
+                </div>
                 <div class="row">
                     <form class="textEntry">
                         <input class="col-xs-9" type="text" autocomplete="off" id="message">
@@ -40,21 +62,21 @@
                 </div>
             </div>
             <div id="users" class="col-xs-3">
-                <table id="userTable" class="table table-hover table-condensed">
-                    <div id="#messages"> </div>
-                    <thead>
-                        <tr>
-                            <th>Player Name</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>John Doe</td>
-                            <td>Alive</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div id="userTable" class="row">
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Player Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userEntries">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="timer" class="row col-lg-12">
+                </div>
+            </div>
             </div>
         </div>
     </div>

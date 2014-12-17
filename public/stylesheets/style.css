@@ -46,12 +46,12 @@ body{
     border-bottom: solid 2px;
     overflow-y: auto;
 }
-.textEntry{
+#textEntry{
     height: 30%;
 }
-#message{
+#player-message{
     height: 100%;
 }
-.textEntry button{
+#textEntry button{
     height: 100%;
 }
