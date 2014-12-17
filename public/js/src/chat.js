@@ -6,9 +6,8 @@ function submitUsername() {
     socket.emit('user connect', name);
     //TODO: Check if it's valid name!
     $("#username-dialog").hide();
-    socket.emit('user connect', $("#username-input").val())
-    if(userList.length==0||userList.indexOf($("#username-input").val())==-1){
-        var user=new User($("#username-input").val());
+    if(userList.length==0||userList.indexOf(name)==-1){
+        var user=new User(name);
         userList.push(user);
     }
     $("#username-dialog").hide()
