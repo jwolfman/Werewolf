@@ -31,8 +31,8 @@
         </ul>
     </div>
     <div id="main" class="container">
-        <div class="row">
-            <div id="roleHolder" class="col-xs-3 container-fluid">
+        <div class="row" style="height:700px; overflow:scroll">
+            <div id="roleHolder" class="col-xs-3">
                 <div id="roleName" class="row col-lg-12">
                     <h3>Temp Name</h3>
                 </div>
@@ -46,15 +46,12 @@
                     </p>
                 </div>
             </div>
-            <div id="chatHolder" class="col-xs-6 container">
+            <div id="chatHolder" class="col-xs-6" style="height:700px; overflow:scroll">
                 <div class="chat row"></div>
-                <div class="row">
-                        <input class="col-xs-9" type="text" autocomplete="off" id="player-message">
-                        <button type="submit" onclick="sendMessage()" class="col-xs-3 btn">Send</button>
-                </div>
-                    <div id="messages"> <ul id="message-list"> </ul></div>
+                    <div id ="messages" class="media conversation">
+                    </div>
             </div>
-            <div id="users" class="col-xs-3">
+            <div id="users" class="col-xs-3 container" style="height:700px; overflow:scroll">
                 <table id="userTable" class="table table-hover table-condensed">
                     <thead>
                         <tr>
@@ -70,6 +67,14 @@
                     </tbody>
                 </table>
             </div>
+            </div>
+                <div class="row">
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-6">
+                            <input class="col-xs-9" type="text" autocomplete="off" id="player-message">
+                            <button type="submit" onclick="sendMessage()" class="col-xs-3 btn">Send</button>
+                        </div>
+                </div>
         </div>
     </div>
 </div>

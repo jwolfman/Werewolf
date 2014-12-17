@@ -17,10 +17,8 @@ io.on('connection', function(socket){
   });
 
   socket.on('user chat message', function(message) {
-      console.log(message);
-      message = JSON.parse(message);
       //TODO:Block if not a talky-time
-    io.sockets.emit('chat message', message.sender + ": " + message.text);
+    io.sockets.emit('chat message', message);
   });
 
 });

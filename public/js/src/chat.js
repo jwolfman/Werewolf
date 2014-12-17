@@ -14,7 +14,9 @@ function sendMessage (){
 }
     
 socket.on('chat message', function(msg){
-    $('#message-list').append("<li>" + msg + "</li>");
+    msg = JSON.parse(msg);
+    console.log(msg);
+    $('#messages').append( '<div class="media conversation"> <div class="media-body"> <h5 class="media-heading">' + msg.sender +'</h5>' + msg.text + '</div></div>');
 });
 
 socket.on('update users', function(playerString) {
