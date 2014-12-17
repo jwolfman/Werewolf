@@ -8,7 +8,16 @@ var gameRoles = {
         image:"",
         onDeath:"false",
         special:"false",
-        onAttack:"false"
+        onAttack:"false",
+        target:"",
+        activate:function(){
+            //show player list with allies marked
+            //select target
+            //if not protected
+                //for target set attacked to true and attacker to werewolves
+        },
+        attacked:false,
+        attacker:"none"
     },
     villager:{
         name:"Villager",
@@ -19,7 +28,9 @@ var gameRoles = {
         image:"",
         onDeath:"false",
         special:"false",
-        onAttack:"false"
+        onAttack:"false",
+        target:"",
+        attacked:false
     },
     seer:{
         name:"Seer",
@@ -30,7 +41,14 @@ var gameRoles = {
         image:"",
         onDeath:"false",
         special:"true",
-        onAttack:"false"
+        onAttack:"false",
+        target:"",
+        attacked:false,
+        activate:function(){
+            //show player list
+            //set target
+            //show target's team
+        }
     },
     witch:{
         name:"Witch",
@@ -41,7 +59,20 @@ var gameRoles = {
         image:"",
         onDeath:"false",
         special:"true",
-        onAttack:"false"
+        onAttack:"false",
+        target:"",
+        attacked:false,
+        hasKill:true,
+        hasHeal:true,
+        activate:function(){
+            //show dying player
+            //show remaining potions
+            //if heal
+                //set attacked to false
+            //if kill
+                //show player list
+                //set targeted player's attacked stat to true and attacker to witch
+        }
     },
     bodyguard:{
         name:"Bodyguard",
@@ -52,7 +83,8 @@ var gameRoles = {
         image:"",
         onDeath:"false",
         special:"true",
-        onAttack:"false"
+        onAttack:"false",
+        target:""
     },
     cupid:{
         name:"Cupid",
@@ -63,7 +95,8 @@ var gameRoles = {
         image:"",
         onDeath:"false",
         special:"true",
-        onAttack:"false"
+        onAttack:"false",
+        target:""
     },
     hunter:{
         name:"Hunter",
@@ -74,7 +107,8 @@ var gameRoles = {
         image:"",
         onDeath:"true",
         special:"true",
-        onAttack:"false"
+        onAttack:"false",
+        target:""
     }
 };
 exports.gameRoles = gameRoles;
