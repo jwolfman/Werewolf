@@ -6,6 +6,21 @@ function submitUsername() {
     socket.emit('user connect', name);
     //TODO: Check if it's valid name!
     $("#username-dialog").hide();
+    if(userList.length==0||userList.indexOf(name)==-1){
+        var user=new User(name);
+        userList.push(user);
+    }
+    $("#username-dialog").hide()
+    printUserList();
+}
+
+function printUserList(){
+    //userlists are not shared between sessions yet
+    var list="#userEntries";
+    jQuery(list).html("");
+    for(var c=0;c<userList.length;c++){
+        jQuery(list).append("<tr><td>"+userList[c].name+"</td><td>"+userList[c].status+"</td></tr>");
+    }
 }
 
 
