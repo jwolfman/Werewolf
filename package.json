@@ -6,7 +6,8 @@
   "dependencies": {
     "ejs": "~0.8.4",
     "express": "~4.10.4",
-    "socket.io": "^1.2.1"
+    "socket.io": "^1.2.1",
+    "body-parser": "~1.10.0"
   },
   "devDependencies": {},
   "scripts": {

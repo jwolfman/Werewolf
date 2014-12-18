@@ -34,6 +34,12 @@ socket.on('chat message', function(msg){
     $('#messages').append( '<div class="media conversation"> <div class="media-body"> <h5 class="media-heading">' + msg.sender +'</h5>' + msg.text + '</div></div>');
 });
 
+socket.on('moderator message', function(msg){
+    msg = JSON.parse(msg);
+    console.log(msg);
+    $('#messages').append( '<div class="media conversation"> <div class="media-body"> <h5 class="media-heading" style="color: red"> Moderator </h5><div style="color: red">' + msg.text + '</div></div></div>');
+});
+
 socket.on('update users', function(playerString) {
     players = JSON.parse(playerString);
     $("#userTable-body").empty();

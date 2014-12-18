@@ -1,20 +1,19 @@
-var chat = require("chatServer.js")
+var chat = require("./chatServer.js")
 var main = require("../app.js");
 var io = main.io;
 var gameRunning = false;
 var userList= chat.people;
 var wolfCount=0;
 var villageCount=0;
-
-var phases = [runNight, runDawn, runDay, runPreSunset, runSunset];
+var roleDistribution;
 
 //Wait until thing starts
 //
 function initGame(){
     var roles=$("#roleDistribution"); //Is th
-    var roleDistribution=[roles.length];
     var i=0;
     gameRunning = true;
+    io.sockets.emit('moderator message', "Night falls, and the game begins...");
     for(role in roles){
         roleDistribution[i]=role;
         i++;
@@ -51,6 +50,7 @@ function run(){
 }
 function isWinner(){
     //TODO: Change to faction count. People can be of multiple factions. 
+    //TODO:Actually, that might be more complicated to determine winners.
     if(wolfCount>villageCount||wolfCount==0){
         return true;
     }
@@ -88,3 +88,5 @@ function runDay(){
         //kill target
         //reveal role
 }
+exports.gameRunning = gameRunning;
+exports.roleDistribution = roleDistribution;

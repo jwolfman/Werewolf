@@ -5,10 +5,12 @@ function User(name, socket) {
     this.status = "Spectating";
     this.defended = false;
     this.isPlaying=true;        
+    this.silenced = false;
 }
 
 User.prototype.beginDay=function(){
     this.defended=false;
+    this.silenced = false;
 };
 
 User.prototype.attacked=function(attacker){

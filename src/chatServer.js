@@ -1,13 +1,11 @@
 var main = require("../app.js");
-var user = require("user.js");
+var user = require("./user.js");
+var game = require("./game.js");
 var io = main.io;
 var people = [];
-var sockets = [];
 
 io.on('connection', function(socket){
   socket.on('disconnect', function(){
-    //TODO: Add logic for user levaing mid-game(kill)  
-    // or pre-game(remove from players)
     if (gameRunning) {
         for (var i = 0; i < people.length; i++) {
             if(socket == people[i].socket) {
@@ -25,7 +23,11 @@ io.on('connection', function(socket){
   });
 
   socket.on('user connect', function(nameParam) {
+    people.push(new user.User(""));
     io.sockets.emit('update users', JSON.stringify(people));
+    // if(people.length == roleDistribution.players) {
+    //     game.initGame(); 
+    // }
   });
 
   socket.on('user chat message', function(message) {
