@@ -54,7 +54,7 @@ function runDay(){
     //reopen chat
     //start timer based on num players left
     //var timer=(numLivePlayers/2)*60
-    //var t=setTimout(function(timer){timer--;},1000);
+    //var t=setTimout(updateTimer("Day",timer),1000);
     //while(timer>0){
         //constantly read nominations
     //}
@@ -62,11 +62,23 @@ function runDay(){
     //close chat
     //start voting timer
     //timer=60;
-    //t=setTimeout(function(timer){timer--},1000);
+    //t=setTimeout(updateTimer("Voting",timer),1000);
     //while(timer>0){
         //show nominees and allow votes to be cast
     //}
+    //window.clearTimeout(t);
     //if more than half of living players agree
         //kill target
         //reveal role
+}
+function updateTimer(phase,timer){
+    timer--;
+    var s=timer;
+    var m=0;
+    while(s>60){
+        m++;
+        s-=60;
+    }
+    jQuery($("timer")).html("");
+    jQuery($("timer")).append("<h4 class=\"row\">"+phase+"</h4><h3 class=\"row\">"+m+":"+s+"</h3>");
 }
