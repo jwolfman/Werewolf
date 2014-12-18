@@ -25,7 +25,6 @@ io.on('connection', function(socket){
 
   socket.on('user connect', function(nameParam) {
     people.push(new user.User(nameParam));
-    console.log(people);
     io.sockets.emit('update users', JSON.stringify(people));
     // if(people.length == roleDistribution.players) {
     //     game.initGame(); 
