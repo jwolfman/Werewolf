@@ -111,4 +111,6 @@ var gameRoles = {
         target:""
     }
 };
+var teamList = [];
+for (role in gameRoles) {}
 exports.gameRoles = gameRoles;

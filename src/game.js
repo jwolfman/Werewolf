@@ -1,12 +1,20 @@
-var userList=new Array();
+var chat = require("chatServer.js")
+var main = require("../app.js");
+var io = main.io;
+var gameRunning = false;
+var userList= chat.people;
 var wolfCount=0;
 var villageCount=0;
 
-var phaseOrder = [,]
+var phases = [runNight, runDawn, runDay, runPreSunset, runSunset];
+
+//Wait until thing starts
+//
 function initGame(){
-    var roles=$("#roleDistribution");
+    var roles=$("#roleDistribution"); //Is th
     var roleDistribution=[roles.length];
     var i=0;
+    gameRunning = true;
     for(role in roles){
         roleDistribution[i]=role;
         i++;
@@ -48,7 +56,13 @@ function isWinner(){
     }
     return false;
 }
+
+function runFirstNight() {
+    //Add code when first round roles are introduced.
+}
+
 function runNight(){
+    var order = [bodyguard, wolves, seer, witch];
     //activate bodyguard
     //activate wolves
     //activate seer

@@ -1,7 +1,7 @@
 function User(name, socket) {
     this.name = name;
     this.socket = socket;
-    this.role = gameRoles.villager;
+    this.role = null;
     this.status = "Spectating";
     this.defended = false;
     this.isPlaying=true;        
@@ -16,3 +16,5 @@ User.prototype.attacked=function(attacker){
         this.status = "Dead";
     }
 };
+
+
