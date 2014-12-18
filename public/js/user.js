@@ -4,6 +4,7 @@ function User(name) {
     this.status = "Spectating";
     this.defended = false;
     this.isPlaying=true;
+    this.nominating={};
 }
 User.prototype.beginDay=function(){
     this.defended=false;

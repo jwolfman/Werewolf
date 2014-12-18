@@ -1,12 +1,13 @@
 var userList=new Array();
+var numLivePlayers=0;
 var wolfCount=0;
 var villageCount=0;
 function initGame(){
     var roles=$("#roleDistribution");
     var roleDistribution=[roles.length];
     var i=0;
-    for(role in roles){
-        roleDistribution[i]=role;
+    for(var role in roles){
+        roleDistribution[i]=role.val();
         i++;
     }
     shuffle(roleDistribution);
@@ -22,6 +23,7 @@ function initGame(){
             i++;
         }
     }
+    numLivePlayers=i;
     run();
 }
 function shuffle(roles){
@@ -53,23 +55,46 @@ function runNight(){
 function runDay(){
     //reopen chat
     //start timer based on num players left
-    //var timer=(numLivePlayers/2)*60
-    //var t=setTimout(updateTimer("Day",timer),1000);
-    //while(timer>0){
+    var nominees={};
+    var timer=(numLivePlayers/2)*60;
+    var t=setTimeout(updateTimer("Day",timer),1000);
+    while(timer>0){
         //constantly read nominations
-    //}
-    //window.clearTimeout(t);
+        //be open to push requests from users with user pushing, target, and a boolean (nominating)
+        //on push
+            //if(nominating){
+                //nominees[target]++;
+            //}else{
+                //nominees[target]--;
+            //}
+    }
+    window.clearTimeout(t);
     //close chat
-    //start voting timer
-    //timer=60;
-    //t=setTimeout(updateTimer("Voting",timer),1000);
-    //while(timer>0){
-        //show nominees and allow votes to be cast
+    var targets={};
+    //for(var nominee in nominees){
+        //targets[nominee]=true;
     //}
-    //window.clearTimeout(t);
-    //if more than half of living players agree
-        //kill target
-        //reveal role
+    //start voting timer
+    timer=60;
+    t=setTimeout(updateTimer("Voting",timer),1000);
+    while(timer>0){
+        //show nominees and allow votes to be cast
+        //open to push requests with user, target, and a boolean
+        //on push
+            //if(voting){
+                //targets[target].votes++;
+            //}else{
+                //targets[target].votes--;
+            //}
+    }
+    window.clearTimeout(t);
+    //for(var target in targets){
+        //if(target.votes>Math.floor(numLivePlayers/2)){
+            //kill target
+            //reveal role
+        //}
+    //}
+    //close chat
 }
 function updateTimer(phase,timer){
     timer--;
