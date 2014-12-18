@@ -6,6 +6,7 @@ function User(name, socket) {
     this.defended = false;
     this.isPlaying=true;        
     this.silenced = false;
+    this.nominating={};
 }
 
 User.prototype.beginDay=function(){
