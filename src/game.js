@@ -1,6 +1,8 @@
 var userList=new Array();
 var wolfCount=0;
 var villageCount=0;
+
+var phaseOrder = [,]
 function initGame(){
     var roles=$("#roleDistribution");
     var roleDistribution=[roles.length];
@@ -24,6 +26,7 @@ function initGame(){
     }
     run();
 }
+
 function shuffle(roles){
     for(var c=0;c<roles.length;c++){
         var temp=roles[c];
@@ -39,6 +42,7 @@ function run(){
     }
 }
 function isWinner(){
+    //TODO: Change to faction count. People can be of multiple factions. 
     if(wolfCount>villageCount||wolfCount==0){
         return true;
     }
