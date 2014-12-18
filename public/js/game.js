@@ -36,8 +36,8 @@ function shuffle(roles){
 }
 function run(){
     while(!isWinner()){
-        runDay();
         runNight();
+        runDay();
     }
 }
 function isWinner(){
@@ -48,9 +48,24 @@ function isWinner(){
 }
 function runNight(){
     //activate bodyguard
-    //activate wolves
+    //for(var user in userList){
+        //if(user.role==roles.bodyguard){
+            //user.role.activate();
+        //}
+    //}
+    activateWolves();
     //activate seer
+    //for(var user in userList){
+        //if(user.role==roles.seer){
+            //user.role.activate();
+        //}
+    //}
     //activate witch
+    //for(var user in userList){
+        //if(user.role.name=="Witch"){
+            //user.role.activate();
+        //}
+    //}
 }
 function runDay(){
     //reopen chat
@@ -59,9 +74,10 @@ function runDay(){
     var timer=(numLivePlayers/2)*60;
     var t=setTimeout(updateTimer("Day",timer),1000);
     while(timer>0){
-        //constantly read nominations
+        //constantly read nominations, nominations done via user list
         //be open to push requests from users with user pushing, target, and a boolean (nominating)
         //on push
+            //needs to be more complex to allow shifting nomination directly and needs to print nominations/unnominations to chat
             //if(nominating){
                 //nominees[target]++;
             //}else{
@@ -72,13 +88,13 @@ function runDay(){
     //close chat
     var targets={};
     //for(var nominee in nominees){
-        //targets[nominee]=true;
+        //targets[nominee]=nominee;//for once JS's falsiness is useful
     //}
     //start voting timer
     timer=60;
     t=setTimeout(updateTimer("Voting",timer),1000);
     while(timer>0){
-        //show nominees and allow votes to be cast
+        //show nominees and allow votes to be cast, would probably be done with radio buttons
         //open to push requests with user, target, and a boolean
         //on push
             //if(voting){
@@ -90,8 +106,10 @@ function runDay(){
     window.clearTimeout(t);
     //for(var target in targets){
         //if(target.votes>Math.floor(numLivePlayers/2)){
-            //kill target
             //reveal role
+            //kill target
+            //target.status="Dead";
+            //target.onDeath();
         //}
     //}
     //close chat
@@ -106,4 +124,14 @@ function updateTimer(phase,timer){
     }
     jQuery($("timer")).html("");
     jQuery($("timer")).append("<h4 class=\"row\">"+phase+"</h4><h3 class=\"row\">"+m+":"+s+"</h3>");
+}
+function activateWolves(){
+    //reopen wolf chat
+    //display live users
+    //start timer
+    var timer=30;
+    var t=setTimeout(updateTimer("Wolves",timer),1000);
+    while(timer>0){
+    }
+    //target with enough votes dies
 }
