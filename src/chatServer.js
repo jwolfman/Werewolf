@@ -3,10 +3,11 @@ var user = require("./user.js");
 var game = require("./game.js");
 var io = main.io;
 var people = [];
+var peopleSockets;
 
 io.on('connection', function(socket){
   socket.on('disconnect', function(){
-    if (gameRunning) {
+    if (game.gameRunning) {
         for (var i = 0; i < people.length; i++) {
             if(socket == people[i].socket) {
                 people.splice(i, 1);
@@ -23,7 +24,8 @@ io.on('connection', function(socket){
   });
 
   socket.on('user connect', function(nameParam) {
-    people.push(new user.User(""));
+    people.push(new user.User(nameParam));
+    console.log(people);
     io.sockets.emit('update users', JSON.stringify(people));
     // if(people.length == roleDistribution.players) {
     //     game.initGame(); 
@@ -38,3 +40,4 @@ io.on('connection', function(socket){
 });
 
 exports.people = people;
+exports.peopleSockets = peopleSockets;

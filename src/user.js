@@ -1,6 +1,5 @@
-function User(name, socket) {
+function User(name) {
     this.name = name;
-    this.socket = socket;
     this.role = null;
     this.status = "Spectating";
     this.defended = false;
@@ -21,3 +20,4 @@ User.prototype.attacked=function(attacker){
 };
 
 
+exports.User = User;
