@@ -1,51 +1,34 @@
 var chat = require("./chatServer.js")
 var main = require("../app.js");
 var io = main.io;
+var players = chat.people;
+var gameRoles = require('./roles.js').gameRoles;
 var gameRunning = false;
 var userList= chat.people;
 var numLivePlayers=0;
 var wolfCount=0;
 var villageCount=0;
-var roleDistribution;
+var roleDistribution = ["Villager", "Villager", "Villager", "Werewolf"];
 
 //Wait until thing starts
 //
 function initGame(){
-    var roles=$("#roleDistribution"); //Is th
-    var i=0;
     gameRunning = true;
     io.sockets.emit('moderator message', "Night falls, and the game begins...");
-    for(role in roles){
-        roleDistribution[i]=role;
-    for(var role in roles){
-        roleDistribution[i]=role.val();
-        i++;
+    roleDistribution = shuffle(roleDistribution);
+    var shuffledPos = 0;
+    for (var i = 0; i < chat.people.length; i++) {
+        var role = gameRoles[roleDistribution[shuffledPos++]]
+        players[i].role = role; 
+        chat.peopleSockets[players[i].name].emit('role assigned', role);
     }
-    shuffle(roleDistribution);
-    i=0;
-    for(var c=0;c<userList.length;c++){
-        if(userList[c].isPlaying){
-            userList[c].role=roleDistribution[i];
-            if(userList[c].role.team=="village"){
-                villageCount++;
-            }else{
-                wolfCount++;
-            }
-            i++;
-        }
-    }
-    numLivePlayers=i;
-    run();
 }
 
-function shuffle(roles){
-    for(var c=0;c<roles.length;c++){
-        var temp=roles[c];
-        var num=Math.floor((Math.random()*roles.length)+c);
-        roles[c]=roles[num];
-        roles[num]=temp;
-    }
+function shuffle(arr){ //v1.0
+    for(var j, x, i = arr.length; i; j = Math.floor(Math.random() * i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
+    return arr;
 }
+
 function run(){
     while(!isWinner()){
         runNight();
@@ -55,7 +38,7 @@ function run(){
 function isWinner(){
     //TODO: Change to faction count. People can be of multiple factions. 
     //TODO:Actually, that might be more complicated to determine winners.
-    if(wolfCount>villageCount||wolfCount==0){
+    if(getMembersOfTeam("Wolves") > getMembersOfTeam("Village") || getMembersOfTeam("Wolves") == 0){
         return true;
     }
     return false;
@@ -135,9 +118,9 @@ function runDay(){
     //if more than half of living players agree
         //kill target
         //reveal role
-}
     //close chat
 }
+
 function updateTimer(phase,timer){
     timer--;
     var s=timer;
@@ -149,6 +132,7 @@ function updateTimer(phase,timer){
     jQuery($("timer")).html("");
     jQuery($("timer")).append("<h4 class=\"row\">"+phase+"</h4><h3 class=\"row\">"+m+":"+s+"</h3>");
 }
+
 function activateWolves(){
     //reopen wolf chat
     //display live users
@@ -159,5 +143,27 @@ function activateWolves(){
     }
     //target with enough votes dies
 }
+
+function getLivingPlayers() {
+    var sum = 0;
+    for (var i = 0; i < players.length; i++) {
+        if (players[i].status == "Alive") {
+            sum++;
+        }
+    }
+    return sum;
+}
+
+function getMembersOfTeam(team) {
+    var sum = 0;
+    for (var i = 0; i < players.length; i++) {
+        if (players[i].team == team) {
+            sum++;
+        }
+    }
+    return sum;
+}
+
 exports.gameRunning = gameRunning;
 exports.roleDistribution = roleDistribution;
+exports.initGame = initGame;

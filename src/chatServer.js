@@ -3,7 +3,7 @@ var user = require("./user.js");
 var game = require("./game.js");
 var io = main.io;
 var people = [];
-var peopleSockets;
+var peopleSockets = {};
 
 io.on('connection', function(socket){
   socket.on('disconnect', function(){
@@ -25,14 +25,15 @@ io.on('connection', function(socket){
 
   socket.on('user connect', function(nameParam) {
     people.push(new user.User(nameParam));
+    peopleSockets[nameParam] = socket;
     io.sockets.emit('update users', JSON.stringify(people));
-    // if(people.length == roleDistribution.players) {
-    //     game.initGame(); 
-    // }
+    if(people.length == game.roleDistribution.length) {
+        game.initGame(); 
+    }
   });
 
   socket.on('user chat message', function(message) {
-      //TODO:Block if not a talky-time
+      //TODO:Block if slienced
     io.sockets.emit('chat message', message);
   });
 

@@ -24,7 +24,16 @@ app.get("/moderator",function(req,res){
 });
 
 app.post('/moderator', strBodyParser, function(req, res) {
-    game.roleDistribution = req.body;
+    game.roleDistribution = [];
+    roles = Object.keys(req.body)
+    for (var i = 0; i < roles.length; i++) {
+        var role = roles[i];
+        console.log(req.body[role]);
+        for (var j = 0; j < req.body[role]; j++) {
+            game.roleDistribution.push(role);
+        }
+    }
+    console.log(game.roleDistribution);
     res.sendStatus(200);
 });
 

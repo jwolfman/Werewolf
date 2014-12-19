@@ -14,16 +14,6 @@ function submitUsername() {
     printUserList();
 }
 
-function printUserList(){
-    //userlists are not shared between sessions yet
-    var list="#userEntries";
-    jQuery(list).html("");
-    for(var c=0;c<userList.length;c++){
-        jQuery(list).append("<tr><td>"+userList[c].name+"</td><td>"+userList[c].status+"</td></tr>");
-    }
-}
-
-
 function sendMessage (){
     socket.emit('user chat message', JSON.stringify({sender:name, text:$('#player-message').val()}));
 }
