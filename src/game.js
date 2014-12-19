@@ -11,6 +11,7 @@ var roleDistribution;
 //Wait until thing starts
 //
 function initGame(){
+    gameRunning=true;
     var roles=$("#roleDistribution"); //Is th
     var i=0;
     gameRunning = true;
@@ -51,6 +52,7 @@ function run(){
         runNight();
         runDay();
     }
+    gameRunning=false;
 }
 function isWinner(){
     //TODO: Change to faction count. People can be of multiple factions. 
