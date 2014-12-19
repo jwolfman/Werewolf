@@ -15,7 +15,7 @@ function submitUsername() {
 }
 
 function sendMessage (){
-    socket.emit('user chat message', JSON.stringify({sender:name, text:$('#player-message').val()}));
+    socket.emit('user chat message', JSON.stringify({sender:name, text:$('#user-message').val()}));
 }
     
 socket.on('chat message', function(msg){
@@ -30,8 +30,8 @@ socket.on('moderator message', function(msg){
 
 socket.on('update users', function(playerString) {
     players = JSON.parse(playerString);
-    $("#userTable-body").empty();
+    $("#userEntries").empty();
     for (var i = 0; i < players.length; i++) {
-        $("#userTable-body").append("<tr> <td>" + players[i].name + "</td> <td>" + players[i].stat + "</td> </tr>");
+        $("#userEntries").append("<tr> <td>" + players[i].name + "</td> <td>" + players[i].status + "</td> </tr>");
     }
 });
