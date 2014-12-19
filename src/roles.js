@@ -1,5 +1,6 @@
+//IMPORTANT: name and object identfier MUST MATCH! ROLE WILL BE undefined OTHERWISE!
 var gameRoles = {
-    werewolf:{
+    Werewolf:{
         name:"Werewolf",
         team:"Wolves",
         nightRole:"true",
@@ -19,7 +20,7 @@ var gameRoles = {
         attacked:false,
         attacker:"none"
     },
-    villager:{
+    Villager:{
         name:"Villager",
         team:"Village",
         nightRole:"false",
@@ -32,7 +33,7 @@ var gameRoles = {
         target:"",
         attacked:false
     },
-    seer:{
+    Seer:{
         name:"Seer",
         team:"Village",
         nightRole:"true",
@@ -50,7 +51,7 @@ var gameRoles = {
             //show target's team
         }
     },
-    witch:{
+    Witch:{
         name:"Witch",
         team:"Village",
         nightRole:"true",
@@ -74,7 +75,7 @@ var gameRoles = {
                 //set targeted player's attacked stat to true and attacker to witch
         }
     },
-    bodyguard:{
+    Bodyguard:{
         name:"Bodyguard",
         team:"Village",
         nightRole:"true",
@@ -86,7 +87,7 @@ var gameRoles = {
         onAttack:"false",
         target:""
     },
-    cupid:{
+    Cupid:{
         name:"Cupid",
         team:"Village",
         nightRole:"false",
@@ -98,7 +99,7 @@ var gameRoles = {
         onAttack:"false",
         target:""
     },
-    hunter:{
+    Hunter:{
         name:"Hunter",
         team:"Village",
         nightRole:"false",

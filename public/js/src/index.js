@@ -35,3 +35,8 @@ socket.on('update users', function(playerString) {
         $("#userEntries").append("<tr> <td>" + players[i].name + "</td> <td>" + players[i].status + "</td> </tr>");
     }
 });
+
+socket.on('role assigned', function(role) {
+    console.log(role);
+   $("#roleName").html("<h3>"+ role + "</h3> ");
+});

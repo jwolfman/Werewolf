@@ -20,7 +20,7 @@ function initGame(){
     for (var i = 0; i < chat.people.length; i++) {
         var role = gameRoles[roleDistribution[shuffledPos++]]
         players[i].role = role; 
-        chat.peopleSockets[players[i].name].emit('role assigned', role);
+        chat.peopleSockets[players[i].name].emit('role assigned', role.name);
     }
 }
 
