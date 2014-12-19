@@ -37,6 +37,10 @@ io.on('connection', function(socket){
     io.sockets.emit('chat message', message);
   });
 
+  socket.on("getPlayers",function(){
+        io.sockets.emit("setPlayers",JSON.stringify(people));
+    });
+
 });
 
 exports.people = people;

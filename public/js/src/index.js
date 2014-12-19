@@ -3,15 +3,24 @@ var players;
 
 function submitUsername() {
     name = $("#username-input").val();
-    socket.emit('user connect', name);
-    //TODO: Check if it's valid name!
-    $("#username-dialog").hide();
-    if(userList.length==0||userList.indexOf(name)==-1){
-        var user=new User(name);
-        userList.push(user);
+    socket.emit("getPlayers");
+    setTimeout(function(){},500);
+    var valid=true;
+    if(typeof(players)!="undefined") {
+        for (var c = 0; c < players.length; c++) {
+            if (players[c].name.valueOf() == name.valueOf()) {
+                valid = false;
+            }
+        }
     }
-    $("#username-dialog").hide()
-    printUserList();
+    if(name===""){
+        valid=false;
+    }
+    if(valid) {
+        socket.emit('user connect', name);
+        //TODO: Check if it's valid name!
+        $("#username-dialog").hide();
+    }
 }
 
 function sendMessage (){
@@ -20,7 +29,7 @@ function sendMessage (){
     
 socket.on('chat message', function(msg){
     msg = JSON.parse(msg);
-    $('#messages').append( '<div class="media conversation"> <div class="media-body"> <h5 class="media-heading">' + msg.sender +'</h5>' + msg.text + '</div></div>');
+    $('#messages').append( '<div class="media conversation"> <div class="media-body"> <h5 class="media-heading">' + msg.sender +':</h5>' + msg.text + '</div></div>');
 });
 
 socket.on('moderator message', function(msg){
@@ -39,4 +48,8 @@ socket.on('update users', function(playerString) {
 socket.on('role assigned', function(role) {
     console.log(role);
    $("#roleName").html("<h3>"+ role + "</h3> ");
+});
+
+socket.on("setPlayers",function(playerString){
+    players=JSON.parse(playerString);
 });
