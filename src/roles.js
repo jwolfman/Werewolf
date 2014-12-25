@@ -18,7 +18,8 @@ var gameRoles = {
                 //for target set attacked to true and attacker to werewolves
         },
         attacked:false,
-        attacker:"none"
+        attacker:"none",
+        explanation:"Wake every night with the other wolves to kill a player and work with them to kill off all opposing players."
     },
     Villager:{
         name:"Villager",
@@ -31,7 +32,8 @@ var gameRoles = {
         special:"false",
         onAttack:"false",
         target:"",
-        attacked:false
+        attacked:false,
+        explanation:"Try to find and lynch the hostile roles during the day."
     },
     Seer:{
         name:"Seer",
@@ -49,7 +51,8 @@ var gameRoles = {
             //show player list
             //set target
             //show target's team
-        }
+        },
+        explanation:"Wake up every night and try to find the werewolves to help the village."
     },
     Witch:{
         name:"Witch",
@@ -73,7 +76,8 @@ var gameRoles = {
             //if kill
                 //show player list
                 //set targeted player's attacked stat to true and attacker to witch
-        }
+        },
+        explanation:"Wake every night to find out who's dying. You have one kill potion and and one healing potion that you can use in the night. You are on the village team."
     },
     Bodyguard:{
         name:"Bodyguard",
@@ -85,7 +89,8 @@ var gameRoles = {
         onDeath:"false",
         special:"true",
         onAttack:"false",
-        target:""
+        target:"",
+        explanation:"Wake up every night to protect a player. You can protect yourself but you can't protect the same person two nights in a row. You are on the village team."
     },
     Cupid:{
         name:"Cupid",
@@ -97,7 +102,8 @@ var gameRoles = {
         onDeath:"false",
         special:"true",
         onAttack:"false",
-        target:""
+        target:"",
+        explanation:"At the beginning of the game pick two players to be lovers. Those players win together, die together, and cannot vote for one another. You are on the village team."
     },
     Hunter:{
         name:"Hunter",
@@ -109,7 +115,7 @@ var gameRoles = {
         onDeath:"true",
         special:"true",
         onAttack:"false",
-        target:""
+        target:"When you die pick another player to kill. You are on the village team."
     }
 };
 

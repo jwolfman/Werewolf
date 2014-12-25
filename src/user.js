@@ -6,6 +6,11 @@ function User(name) {
     this.isPlaying=true;        
     this.silenced = false;
     this.nominating={};
+    this.displayName=name;
+}
+
+User.prototype.changeDisplayName=function(name){
+    this.displayName=name;
 }
 
 User.prototype.beginDay=function(){

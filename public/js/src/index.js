@@ -3,6 +3,7 @@ var players;
 
 function submitUsername() {
     name = $("#username-input").val();
+    displayName=name;
     socket.emit("getPlayers");
     setTimeout(function(){},500);
     var valid=true;
@@ -24,7 +25,7 @@ function submitUsername() {
 }
 
 function sendMessage (){
-    socket.emit('user chat message', JSON.stringify({sender:name, text:$('#user-message').val()}));
+    socket.emit('user chat message', JSON.stringify({sender:displayName, text:$('#user-message').val()}));
 }
     
 socket.on('chat message', function(msg){
@@ -41,13 +42,13 @@ socket.on('update users', function(playerString) {
     players = JSON.parse(playerString);
     $("#userEntries").empty();
     for (var i = 0; i < players.length; i++) {
-        $("#userEntries").append("<tr> <td>" + players[i].name + "</td> <td>" + players[i].status + "</td> </tr>");
+        $("#userEntries").append("<tr> <td>" + players[i].displayName + "</td> <td>" + players[i].status + "</td> </tr>");
     }
 });
 
 socket.on('role assigned', function(role) {
     console.log(role);
-   $("#roleName").html("<h3>"+ role + "</h3> ");
+   $("#roleName").html("<h3 class=\""+role.team+"\">"+ role + "</h3> ");
 });
 
 socket.on("setPlayers",function(playerString){
