@@ -1,27 +1,26 @@
-var chat = require("./chatServer.js")
+var globals = require("./globals.js");
 var main = require("../app.js");
+var roles = require("../src/roles.js").roles;
 var io = main.io;
-var players = chat.people;
-var gameRoles = require('./roles.js').gameRoles;
-var gameRunning = false;
-var userList= chat.people;
-var numLivePlayers=0;
-var wolfCount=0;
-var villageCount=0;
-var roleDistribution = ["Villager", "Villager", "Villager", "Werewolf"];
+var roleDistribution = ["Villager", "Villager", "Werewolf"];
+var phases = ["Night"/*, "Day", "Voting"*/];
+var phasePos = 0; //Checks where in the phase list it is
+var nightOrderPos = 0; //checks role for night order
+var nightOrder = [roles.Werewolf];
+var deathQueue = [];//Queue of people to activate ondeath.
 
 //Wait until thing starts
-//
+
 function initGame(){
-    gameRunning = true;
     io.sockets.emit('moderator message', "Night falls, and the game begins...");
     roleDistribution = shuffle(roleDistribution);
     var shuffledPos = 0;
-    for (var i = 0; i < chat.people.length; i++) {
-        var role = gameRoles[roleDistribution[shuffledPos++]]
-        players[i].role = role; 
-        chat.peopleSockets[players[i].name].emit('role assigned', role.name);
+    for (var i = 0; i < globals.players.length; i++) {
+        var role = roles[roleDistribution[shuffledPos++]]
+        globals.players[i].role = role; 
+        globals.playerSockets[globals.players[i].name].emit('role assigned', role.name);
     }
+    main.serverSocket.emit("start", JSON.stringify({key:globals.serverAuthKey}));
 }
 
 function shuffle(arr){ //v1.0
@@ -29,13 +28,7 @@ function shuffle(arr){ //v1.0
     return arr;
 }
 
-function run(){
-    while(!isWinner()){
-        runNight();
-        runDay();
-    }
-}
-function isWinner(){
+function isWinner() {
     //TODO: Change to faction count. People can be of multiple factions. 
     //TODO:Actually, that might be more complicated to determine winners.
     if(getMembersOfTeam("Wolves") > getMembersOfTeam("Village") || getMembersOfTeam("Wolves") == 0){
@@ -44,38 +37,87 @@ function isWinner(){
     return false;
 }
 
-function runFirstNight() {
+exports.startGame = function() {
+   //runfirstnight
+    main.serverSocket.emit("advance", JSON.stringify({key:globals.serverAuthKey}));
+};
+
+exports.advance = function() {
+    // if (deathQueue.length > 0) {
+    //     globals.currentPhase = death;
+    //     var next = deathQueue.pop();
+    //     next.apply();
+    // }
+    if (eval("advance"+phases[phasePos]+"();")) {
+        //Is winner
+        phasePos++;
+        if (phasePos >= phases.length) {
+            phasePos = 0;
+        }
+        announceDeaths();
+        // main.serverSocket.emit('advance', {key:globals.serverAuthKey});
+    }  
+};
+
+var announceDeaths = function() {
+    for (var i = 0; i < globals.players.length; i++) {
+        if (globals.players[i].dead) {
+            main.io.sockets.emit('moderator message', globals.players[i].name + " is dead.");
+        }
+    }
+    
+};
+
+var advanceNight = function() {
+    if (nightOrderPos >= nightOrder.length)  {
+        nightOrderPos = 0;
+        return true;
+    } else {
+        activateRole(nightOrder[nightOrderPos++]);    
+    }
+    return false;
+};
+exports.advanceNight = advanceNight;
+
+var activateRole = function (role) {
+    var playersWithRole = globals.players.filter(function(e) {e.role == role;});
+    io.sockets.emit('moderator message', role.name + ", wake up!");
+    for (var i = 0; i < playersWithRole.length; i++) {
+        playersWithRole[i].wakeup();
+    }
+    //set timeout(configrable)
+    //TODO:WAIT FOR SIGNAL
+    setTimeout(function() {applyRole(role);}, role.waitTime);
+};
+
+var applyRole = function(role) {
+   role.completion();
+   deactivateRole(role);
+   main.serverSocket.emit("advance", JSON.stringify({key:globals.serverAuthKey}));
+};
+
+var runFirstNight = function () {
     //Add code when first round roles are introduced.
+    //advance phase
+    main.serverSocket.emit("eval", JSON.stringify({run:"game.advancePhase();", key:globals.serverAuthKey}));
+};
+
+var deactivateRole = function(role) {
+    var playersWithRole = globals.players.filter(function(e) {return e.role == role;});
+    io.sockets.emit('moderator message', role.name + ", go to sleep!");
+    for (var i = 0; i < playersWithRole.length; i++) {
+        playersWithRole[i].role.sleep(playersWithRole[i]);
+    }
 }
 
-function runNight(){
-    var order = [bodyguard, wolves, seer, witch];
-    //activate bodyguard
-    //for(var user in userList){
-        //if(user.role==roles.bodyguard){
-            //user.role.activate();
-        //}
-    //}
-    activateWolves();
-    //activate seer
-    //for(var user in userList){
-        //if(user.role==roles.seer){
-            //user.role.activate();
-        //}
-    //}
-    //activate witch
-    //for(var user in userList){
-        //if(user.role.name=="Witch"){
-            //user.role.activate();
-        //}
-    //}
-}
-function runDay(){
+var runDawn = function() {
+    
+};
+
+var runDay = function (){
     //reopen chat
     //start timer based on num players left
     var nominees={};
-    var timer=(numLivePlayers/2)*60;
-    var t=setTimeout(updateTimer("Day",timer),1000);
     while(timer>0){
         //constantly read nominations, nominations done via user list
         //be open to push requests from users with user pushing, target, and a boolean (nominating)
@@ -121,33 +163,11 @@ function runDay(){
     //close chat
 }
 
-function updateTimer(phase,timer){
-    timer--;
-    var s=timer;
-    var m=0;
-    while(s>60){
-        m++;
-        s-=60;
-    }
-    jQuery($("timer")).html("");
-    jQuery($("timer")).append("<h4 class=\"row\">"+phase+"</h4><h3 class=\"row\">"+m+":"+s+"</h3>");
-}
-
-function activateWolves(){
-    //reopen wolf chat
-    //display live users
-    //start timer
-    var timer=30;
-    var t=setTimeout(updateTimer("Wolves",timer),1000);
-    while(timer>0){
-    }
-    //target with enough votes dies
-}
 
 function getLivingPlayers() {
     var sum = 0;
-    for (var i = 0; i < players.length; i++) {
-        if (players[i].status == "Alive") {
+    for (var i = 0; i < globals.players.length; i++) {
+        if (globals.players[i].status == "Alive") {
             sum++;
         }
     }
@@ -156,14 +176,13 @@ function getLivingPlayers() {
 
 function getMembersOfTeam(team) {
     var sum = 0;
-    for (var i = 0; i < players.length; i++) {
-        if (players[i].team == team) {
+    for (var i = 0; i < globals.players.length; i++) {
+        if (globals.players[i].role.team == team) {
             sum++;
         }
     }
     return sum;
 }
 
-exports.gameRunning = gameRunning;
 exports.roleDistribution = roleDistribution;
 exports.initGame = initGame;

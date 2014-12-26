@@ -2,14 +2,13 @@
 <head>
     <link rel="stylesheet" href="/public/stylesheets/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/public/stylesheets/style.css">
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://cdn.socket.io/socket.io-1.2.1.js"></script>
+    <!-- <link type="text/css" rel="stylesheet" href="/public/stylesheets/jquery.dropdown.css" /> -->
+    <script src="/public/js/lib/jquery.js"></script>
+    <!-- <script type="text/javascript" src="/public/js/lib/jquery.dropdown.js"></script> -->
+    <script src="/public/js/lib/socket.js"></script>
     <script src="/public/stylesheets/dist/js/bootstrap.min.js"></script>
-    <script src="/public/js/lib/jquery.simplemodal.1.4.4.min.js"></script>
-    <script src="/public/js/roles.js"></script>
-    <script src="/public/js/user.js"></script>
-    <script src="/public/js/game.js"></script>
     <script src="/public/js/src/index.js"></script>
+    <script src="/public/js/src/roles.js"></script>
 </head>
 <body>
  <div id="username-dialog" class="modal-dialog">
@@ -62,21 +61,8 @@
                 </div>
             </div>
             <div id="users" class="col-xs-3">
-                <div id="userTable" class="row">
-                    <table class="table table-hover table-condensed">
-                        <thead>
-                            <tr>
-                                <th>Player Name</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="userEntries">
-                        </tbody>
-                    </table>
+                <div id="userEntries" class="btn-group-vertical">
                 </div>
-                <div id="timer" class="row col-lg-12">
-                </div>
-            </div>
             </div>
         </div>
     </div>

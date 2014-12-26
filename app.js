@@ -2,12 +2,8 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var app = express();
-var roleModule = require('./src/roles.js');
 var server=http.createServer(app);
-var io = require('socket.io')(server);
-exports.io = io;
 var bodyParser = require('body-parser');
-var game = require('./src/game.js');
 app.set('port', 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -28,16 +24,20 @@ app.post('/moderator', strBodyParser, function(req, res) {
     roles = Object.keys(req.body)
     for (var i = 0; i < roles.length; i++) {
         var role = roles[i];
-        console.log(req.body[role]);
         for (var j = 0; j < req.body[role]; j++) {
             game.roleDistribution.push(role);
         }
     }
-    console.log(game.roleDistribution);
     res.sendStatus(200);
 });
 
+var io = require('socket.io')(server);
+exports.io = io;
+var socketClient = require("socket.io-client");
+exports.serverSocket = socketClient.connect('http://localhost:3000');
 var chatServer = require("./src/chatServer.js");
+var game = require('./src/game.js');
+var roleModule = require('./src/roles.js');
 
 server.listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
