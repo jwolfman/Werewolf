@@ -10,6 +10,23 @@
     http://www.dafont.com/savage3.font?fpp=100
     *
 }*/
+@font-face{
+    font-family: "Lycanthrope";/*Title font, if used send info about the project to savage@sinistervisions.com because they'd like to know*/
+    src:url("/public/fonts/lycanthrope/Lycanthrope.ttf");
+}
+@font-face{
+    font-family: "Gypsy Curse";/*Evil font*/
+    src:url("/public/fonts/gypsy_curse/Gypsy%20Curse.ttf");
+}
+@font-face {
+    font-family: "October Crow";/*Village font*/
+    src: url("/public/fonts/october_crow/October%20Crow.ttf");
+}
+@font-face {
+    font-family: "Savage";
+    src: url("/public/fonts/Savage.ttf");
+}
+
 body{
     font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
     font-size:12px;
@@ -19,6 +36,7 @@ body{
 }
 #main{
     border: solid 2px;
+    padding:0px;
 }
 #roleHolder{
     border-right: solid 2px;
@@ -27,6 +45,13 @@ body{
 #roleName{
     height: 10%;
     border-bottom: solid 2px;
+    font-family: "Lycanthrope";
+}
+#roleName .Village{
+    font-family: "October Crow";
+}
+#roleName .Wolves{
+    font-family: "Gypsy Curse";
 }
 #roleImage{
     height: 50%;
@@ -45,17 +70,38 @@ body{
     height: 70%;
     border-bottom: solid 2px;
     overflow-y: auto;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 #textEntry{
     height: 30%;
 }
-#player-message{
+#user-message{
     height: 100%;
 }
-#textEntry button{
+#textEntry input[type="button"]{
     height: 100%;
 }
 #userTable{
     height: 60%;
     border-bottom: solid 2px;
+}
+#userTable thead{
+    font-family: "Lycanthrope";
+}
+.media-heading{
+    display: inline;
+}
+.conversation{
+    margin-top: 5px;
+}
+#username-dialog{
+    z-index: 500;
+    position: absolute;
+    left: 25%;
+    top: 25%;
+    text-align: center;
+}
+#username-dialog h3{
+    font-family: "Lycanthrope";
 }

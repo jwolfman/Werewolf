@@ -76,8 +76,12 @@ io.on('connection', function(socket){
             console.log("Incorrect server key used.");
         }
     });
-});
 
+  socket.on("getPlayers",function(){
+        io.sockets.emit("setPlayers",JSON.stringify(globals.players));
+    });
+
+});
 var emitToAwake = function(event, obj) {
    obj = JSON.stringify(obj); 
    var awake = globals.players.filter(function(u) {return u.awake;});
@@ -85,4 +89,5 @@ var emitToAwake = function(event, obj) {
        globals.playerSockets[awake[i].name].emit(event, obj);
    }
 };
+
 exports.emitToAwake = emitToAwake;

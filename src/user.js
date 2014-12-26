@@ -9,6 +9,10 @@ function User(name) {
     this.awake = true;
 }
 
+User.prototype.changeDisplayName=function(name){
+    this.displayName=name;
+}
+
 User.prototype.eventCalls = function(event) {
     for (var i = 0; i < this.role[event].length; i++) {
         var actioncall = this.role[event][i];
