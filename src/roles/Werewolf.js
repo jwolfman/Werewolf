@@ -26,7 +26,7 @@ var Werewolf = function () {
             return;
         }
         if (!target.defended) {
-            target.dead = true;
+            target.killed = true;
         }
     };
 

@@ -25,9 +25,8 @@ io.on('connection', function(socket){
   });
 
   socket.on('user connect', function(nameParam) {
-    globals.players.push(new user.User(nameParam));
-    globals.playerSockets[nameParam] = socket;
-    io.sockets.emit('update users', JSON.stringify(globals.players));
+    globals.players.push(new user.User(nameParam, socket));
+    io.sockets.emit('update users', JSON.stringify(sanitizedPlayersList()));
     if(globals.players.length == game.roleDistribution.length) {
         gameRunning=true;
         game.initGame(); 
@@ -35,8 +34,13 @@ io.on('connection', function(socket){
   });
 
   socket.on('user chat message', function(message) {
-      //TODO:Block if slienced
-    io.sockets.emit('chat message', message);
+    var user = _.find(globals.players, function(p) {return p.socket  == socket;});
+    if(user.awake && !user.silenced && !user.dead) {
+        emitToAwake("chat message", JSON.parse(message));
+    }
+    else {
+        socket.emit('moderator message', "You cannot do that at this time.");
+    }
   });
 
   socket.on('action', function(actionString) {
@@ -45,8 +49,9 @@ io.on('connection', function(socket){
      var target = _.find(globals.players, function(p) {return p.name == actionPost.target;});
      //This expr is evaluated before the if for the purpose of 
      try {
-        var allowed = user.role[globals.currentPhase].hasOwnProperty(actionPost.action);
+        var allowed = !user.dead && user.awake && user.role[globals.currentPhase].hasOwnProperty(actionPost.action);
     } catch (err) {
+        console.log(err);
         allowed = false; 
     }
     if (allowed) {
@@ -77,17 +82,51 @@ io.on('connection', function(socket){
         }
     });
 
+    socket.on("announce deaths", function(obj) {
+        var evalObj = JSON.parse(obj);
+        if (evalObj.key == globals.serverAuthKey) {
+            game.announceDeaths();
+        }
+        else {
+            console.log("Incorrect server key used.");
+        }
+    });
+
+    socket.on("repeat", function(obj) {
+        var evalObj = JSON.parse(obj);
+        if (evalObj.key == globals.serverAuthKey) {
+            game.repeatPhase();
+        }
+        else {
+            console.log("Incorrect server key used.");
+        }
+    });
+
   socket.on("getPlayers",function(){
-        io.sockets.emit("setPlayers",JSON.stringify(globals.players));
+        io.sockets.emit("setPlayers",JSON.stringify(sanitizedPlayersList()));
     });
 
 });
+
 var emitToAwake = function(event, obj) {
    obj = JSON.stringify(obj); 
-   var awake = globals.players.filter(function(u) {return u.awake;});
-   for (var i = 0; i < awake.length; i++) {
-       globals.playerSockets[awake[i].name].emit(event, obj);
-   }
+   var awake = globals.players.filter(function(p) {return p.awake;});
+   _.forEach(awake, function (p) {p.socket.emit(event, obj);});
+};
+exports.emitToAwake = emitToAwake;
+
+var sanitizedPlayersList = function() {
+    var sanitized = [];
+    for (var i = 0; i < globals.players.length; i++) {
+        var obj = _.clone(globals.players[i]);
+        obj.socket = null;
+        obj.role = null;
+        sanitized.push(obj);
+    }
+    return sanitized;
 };
 
-exports.emitToAwake = emitToAwake;
+function updatePlayers() {
+        io.sockets.emit('update users', JSON.stringify(sanitizedPlayersList()));
+}
+exports.updatePlayers = updatePlayers;

@@ -2,12 +2,7 @@ var socket = io.connect('http://localhost:3000');
 var role;
 var players;
 var name;
-var statusIcons = { "alive":'<span class="glyphicon glyphicon-user"></span>',
-                    "dead":'<span class="glyphicon glyphicon-skull"></span>',
-                    "nominated":'<span class="glyphicon glyphicon-fire"></span>',
-                    "ally":'<span class="glyphicon glyphicon-ok"></span>',
-                    "spectator":'<span class="glyphicon glyphicon-eye"></span>'
-                };
+var nominated = [];
 
 function submitUsername() {
     name = $("#username-input").val();
@@ -48,24 +43,26 @@ socket.on('moderator message', function(msg){
 socket.on('update users', function(playerString) {
     players = JSON.parse(playerString);
     $("#userEntries").empty();
+    nominated = _.unique(_.map(players, function(p) {return p.nominated;}));
+    console.log(nominated);
+    nominated = nominated.filter(function(item) {return !(item === undefined || item === null);});
     var menuStr = roleMenuString();
     for (var i = 0; i < players.length; i++) {
         var targetStr = menuStr.replace(/@TARGET/g, players[i].name);
-        // var iconStr = targetStr.replace(/@ICON/, getIcons(players[i]));
-        $("#userEntries").append(targetStr);
+        var iconStr = targetStr.replace(/@ICON/, getIcons(players[i]));
+        $("#userEntries").append(iconStr);
     }
 });
 
 socket.on('role assigned', function(r) {
-    console.log(r);
     role = roles[r];
     $("#roleName").html("<h3>"+ r + "</h3> ");
     var menuStr = roleMenuString();
     $("#userEntries").empty();
     for (var i = 0; i < players.length; i++) {
         var targetStr = menuStr.replace(/@TARGET/g, players[i].name);
-        // var iconStr = targetStr.replace(/@ICON/, getIcons(players[i]));
-        $("#userEntries").append(targetStr);
+        var iconStr = targetStr.replace(/@ICON/, getIcons(players[i]));
+        $("#userEntries").append(iconStr);
     }
 });
 
@@ -73,7 +70,7 @@ function roleMenuString(phase) {
     var actions = [];
     var str = "";
     // if (phase == "day") {
-    actions = [{action:"nominate", title:"Nominate" }];
+    actions = [{action:"nominate", title:"Nominate" }, {action:"vote", title:"Vote" }];
     // } 
     if (role != undefined) {
         actions = actions.concat(role.day.concat(role.night));
@@ -82,21 +79,17 @@ function roleMenuString(phase) {
          //$TARGET gets replaced with the user when it gets integrated with the action
          str += '<li onclick="doAction(\''+ actions[i].action + '\', \'@TARGET\' );"><a>' + actions[i].title + '</a></li>'; 
      } 
-    return  '<div class="btn-group" role="group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@TARGET <span class="caret"></span></button> <ul class="dropdown-menu" role="menu">' + str + '</ul></div>';
+    return  '<div class="btn-group" role="group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@TARGET @ICON <span class="caret"></span></button> <ul class="dropdown-menu" role="menu">' + str + '</ul></div>';
 }
 
-function getIcons() {
-    console.log(arguments);
+function getIcons(p) {
     var ret = "";
-    var items = ["alive", "dead", "nominated", "ally"];
-    for (var i = 0; i < players.length; i++) {
-        for (var j = 0; i < items.length; j++) {
-            if (players[i]["status"]  == items[j] || players[i][items[j]]) {
-                ret.concat(statusIcons[items[j]]);
-            }
+        if (p.dead) {
+            ret += 'Dead ';
+        } 
+        if (nominated.indexOf(p.name) !== -1) {
+            ret += 'Nominated ';
         }
-    }
-    if (ret == "") {ret = statusIcons["spectator"];}
     return ret;
 }
 

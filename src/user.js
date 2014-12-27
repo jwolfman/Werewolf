@@ -1,12 +1,15 @@
-function User(name) {
+function User(name, socket) {
     this.name = name;
+    this.socket = socket;
     this.role = null;
-    this.status = "Spectating";
     this.defended = false;
-    this.isPlaying=true;        
-    this.silenced = false;
-    this.nominated={};
     this.awake = true;
+    this.silenced = false;
+    this.nominated="";
+    this.votedFor="";
+    this.awake = true;
+    this.killed = false; //Has been killed this turn?
+    this.dead = false;
 }
 
 User.prototype.changeDisplayName=function(name){
@@ -18,17 +21,6 @@ User.prototype.eventCalls = function(event) {
         var actioncall = this.role[event][i];
         actioncall = actioncall.split(":");
         this[actioncall[0]](JSON.parse(actioncall[1]));
-    }
-};
-
-User.prototype.beginDay=function(){
-    this.defended=false;
-    this.silenced = false;
-};
-
-User.prototype.attacked=function(attacker){
-    if(!this.defended) {
-        this.status = "Dead";
     }
 };
 

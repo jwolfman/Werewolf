@@ -1,25 +1,31 @@
+var _ = require("underscore");
 var globals = require("./globals.js");
+var chat = require("./chatServer.js");
 var main = require("../app.js");
 var roles = require("../src/roles.js").roles;
 var io = main.io;
-var roleDistribution = ["Villager", "Villager", "Werewolf"];
-var phases = ["Night"/*, "Day", "Voting"*/];
+var roleDistribution = ["Villager", "Villager", "Villager", "Werewolf"];
+var phaseMessage =  ["Night falls. Go to sleep.",  "The day begins. Discuss and nominate.",  "Voting begins. Pick from the nominees."]
+var phases = ["Night", "Day", "Voting"];
 var phasePos = 0; //Checks where in the phase list it is
+globals.currentPhase = phases[phasePos];
 var nightOrderPos = 0; //checks role for night order
 var nightOrder = [roles.Werewolf];
 var deathQueue = [];//Queue of people to activate ondeath.
 
+var dayEnd = false;
+
 //Wait until thing starts
+
 
 function initGame(){
     io.sockets.emit('moderator message', "Night falls, and the game begins...");
     roleDistribution = shuffle(roleDistribution);
     var shuffledPos = 0;
-    for (var i = 0; i < globals.players.length; i++) {
-        var role = roles[roleDistribution[shuffledPos++]]
-        globals.players[i].role = role; 
-        globals.playerSockets[globals.players[i].name].emit('role assigned', role.name);
-    }
+    _.forEach(globals.players, function(p) {
+        p.role = roles[roleDistribution[shuffledPos++]]; 
+        p.socket.emit('role assigned', p.role.name);
+    });
     main.serverSocket.emit("start", JSON.stringify({key:globals.serverAuthKey}));
 }
 
@@ -39,62 +45,95 @@ function isWinner() {
 
 exports.startGame = function() {
    //runfirstnight
-    main.serverSocket.emit("advance", JSON.stringify({key:globals.serverAuthKey}));
+    main.serverSocket.emit("repeat", JSON.stringify({key:globals.serverAuthKey}));
 };
 
 exports.advance = function() {
-    // if (deathQueue.length > 0) {
+    if (deathQueue.length > 0) {
+            chat.updatePlayers();
     //     globals.currentPhase = death;
     //     var next = deathQueue.pop();
     //     next.apply();
-    // }
-    if (eval("advance"+phases[phasePos]+"();")) {
-        //Is winner
-        phasePos++;
-        if (phasePos >= phases.length) {
-            phasePos = 0;
-        }
-        announceDeaths();
-        // main.serverSocket.emit('advance', {key:globals.serverAuthKey});
-    }  
+    //     announce deaths
+    //     emit advance.
+    //     return
+    }
+    //Check for winners
+    phasePos++;
+    if (phasePos >= phases.length) {
+        phasePos = 0;
+    }
+    globals.currentPhase = phases[phasePos];
+    main.io.sockets.emit('moderator message', phaseMessage[phasePos]);
+    main.serverSocket.emit("repeat", JSON.stringify({key:globals.serverAuthKey}));
+};
+
+exports.repeatPhase = function() {
+    eval("advance"+phases[phasePos]+"();");
 };
 
 var announceDeaths = function() {
-    for (var i = 0; i < globals.players.length; i++) {
-        if (globals.players[i].dead) {
-            main.io.sockets.emit('moderator message', globals.players[i].name + " is dead.");
-        }
-    }
-    
+    var killed = globals.players.filter(function(p) {return p.killed;});
+    _.forEach(killed, function(p) {
+            main.io.sockets.emit('moderator message', p.name + " is dead.");
+            p.killed = false;
+            p.dead = true;
+            deathQueue.push(p);
+    });
+    main.serverSocket.emit("advance", JSON.stringify({key:globals.serverAuthKey}));
 };
+exports.announceDeaths = announceDeaths;
 
 var advanceNight = function() {
     if (nightOrderPos >= nightOrder.length)  {
         nightOrderPos = 0;
-        return true;
+        main.serverSocket.emit("announce deaths", JSON.stringify({key:globals.serverAuthKey}));
     } else {
+        _.forEach(globals.players, function(p) {p.role.sleep(p);});
         activateRole(nightOrder[nightOrderPos++]);    
     }
-    return false;
 };
 exports.advanceNight = advanceNight;
 
 var activateRole = function (role) {
-    var playersWithRole = globals.players.filter(function(e) {e.role == role;});
+    var playersWithRole = globals.players.filter(function(p) {return p.role == role;});
     io.sockets.emit('moderator message', role.name + ", wake up!");
-    for (var i = 0; i < playersWithRole.length; i++) {
-        playersWithRole[i].wakeup();
-    }
-    //set timeout(configrable)
-    //TODO:WAIT FOR SIGNAL
+    _.forEach(playersWithRole, function(p) {p.role.wakeUp(p);});
     setTimeout(function() {applyRole(role);}, role.waitTime);
 };
 
 var applyRole = function(role) {
    role.completion();
    deactivateRole(role);
-   main.serverSocket.emit("advance", JSON.stringify({key:globals.serverAuthKey}));
+   main.serverSocket.emit("repeat", JSON.stringify({key:globals.serverAuthKey}));
 };
+
+var advanceDay = function() {
+    _.forEach(globals.players, function(p) {p.role.wakeUp(p);});
+    setTimeout(function() {main.serverSocket.emit("announce deaths", JSON.stringify({key:globals.serverAuthKey}));}, 20000);
+};
+
+var advanceVoting = function() {
+    setTimeout(function() {
+        countVotes();
+        main.serverSocket.emit("announce deaths", JSON.stringify({key:globals.serverAuthKey}));
+    }, 
+    20000);
+};
+
+var countVotes = function () {
+    var targets = {};   
+    _.forEach(globals.players, function(p) {targets[p.nominated] = 0;});
+    _.forEach(globals.players, function(p) {if(targets.hasOwnProperty(p.votedFor)) {targets[p.votedFor]++;}});
+    var lynch = _.invert(targets)[_.max(targets)];
+    lynch = _.find(globals.players, function(p) {return p.name == lynch;});
+    //Check for majority.
+    if (lynch !== undefined) {
+        lynch.killed = true;
+    }
+};
+
+
 
 var runFirstNight = function () {
     //Add code when first round roles are introduced.
@@ -105,83 +144,11 @@ var runFirstNight = function () {
 var deactivateRole = function(role) {
     var playersWithRole = globals.players.filter(function(e) {return e.role == role;});
     io.sockets.emit('moderator message', role.name + ", go to sleep!");
-    for (var i = 0; i < playersWithRole.length; i++) {
-        playersWithRole[i].role.sleep(playersWithRole[i]);
-    }
-}
-
-var runDawn = function() {
-    
+    _.forEach(playersWithRole, function(p) {p.role.sleep(p);});
 };
 
-var runDay = function (){
-    //reopen chat
-    //start timer based on num players left
-    var nominees={};
-    while(timer>0){
-        //constantly read nominations, nominations done via user list
-        //be open to push requests from users with user pushing, target, and a boolean (nominating)
-        //on push
-            //needs to be more complex to allow shifting nomination directly and needs to print nominations/unnominations to chat
-            //if(nominating){
-                //nominees[target]++;
-            //}else{
-                //nominees[target]--;
-            //}
-    }
-    window.clearTimeout(t);
-    //close chat
-    var targets={};
-    //for(var nominee in nominees){
-        //targets[nominee]=nominee;//for once JS's falsiness is useful
-    //}
-    //start voting timer
-    timer=60;
-    t=setTimeout(updateTimer("Voting",timer),1000);
-    while(timer>0){
-        //show nominees and allow votes to be cast, would probably be done with radio buttons
-        //open to push requests with user, target, and a boolean
-        //on push
-            //if(voting){
-                //targets[target].votes++;
-            //}else{
-                //targets[target].votes--;
-            //}
-    }
-    window.clearTimeout(t);
-    //for(var target in targets){
-        //if(target.votes>Math.floor(numLivePlayers/2)){
-            //reveal role
-            //kill target
-            //target.status="Dead";
-            //target.onDeath();
-        //}
-    //}
-    //if more than half of living players agree
-        //kill target
-        //reveal role
-    //close chat
-}
-
-
-function getLivingPlayers() {
-    var sum = 0;
-    for (var i = 0; i < globals.players.length; i++) {
-        if (globals.players[i].status == "Alive") {
-            sum++;
-        }
-    }
-    return sum;
-}
-
 function getMembersOfTeam(team) {
-    var sum = 0;
-    for (var i = 0; i < globals.players.length; i++) {
-        if (globals.players[i].role.team == team) {
-            sum++;
-        }
-    }
-    return sum;
+    return _.groupBy(globals.players, function(p) {return p.role.faction;});
 }
 
 exports.roleDistribution = roleDistribution;
