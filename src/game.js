@@ -35,12 +35,18 @@ function shuffle(arr){ //v1.0
 }
 
 function isWinner() {
-    //TODO: Change to faction count. People can be of multiple factions. 
-    //TODO:Actually, that might be more complicated to determine winners.
-    if(getMembersOfTeam("Wolves") > getMembersOfTeam("Village") || getMembersOfTeam("Wolves") == 0){
-        return true;
+    var winners = [];
+    var factionList = ["Werewolves", "Village"];
+    var factions  = _.groupBy(globals.players.filter(function(p) {return !p.dead;}), function(p) {return p.role.faction;});
+    _.forEach(factionList, function(f) {if (!factions.hasOwnProperty(f)) {factions[f] = [];} });
+    console.log(factions);
+    if (factions.Werewolves.length >= factions.Village.length) {
+            winners.push("Werewolves");
     }
-    return false;
+    if (factions.Werewolves.length === 0 && factions.Village.length > 0){
+        winners.push("Village");
+    }
+    return winners;
 }
 
 exports.startGame = function() {
@@ -58,13 +64,19 @@ exports.advance = function() {
     //     emit advance.
     //     return
     }
-    //Check for winners
+    var winners = isWinner();
+    if (winners.length > 0) {
+        _.forEach(winners, function(p) { main.io.sockets.emit('moderator message', p + " wins!"); });
+        return;
+    }
+
     phasePos++;
     if (phasePos >= phases.length) {
         phasePos = 0;
     }
     globals.currentPhase = phases[phasePos];
     main.io.sockets.emit('moderator message', phaseMessage[phasePos]);
+    chat.updatePlayers();
     main.serverSocket.emit("repeat", JSON.stringify({key:globals.serverAuthKey}));
 };
 
@@ -148,7 +160,7 @@ var deactivateRole = function(role) {
 };
 
 function getMembersOfTeam(team) {
-    return _.groupBy(globals.players, function(p) {return p.role.faction;});
+    return 
 }
 
 exports.roleDistribution = roleDistribution;

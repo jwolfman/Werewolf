@@ -121,6 +121,7 @@ var sanitizedPlayersList = function() {
         var obj = _.clone(globals.players[i]);
         obj.socket = null;
         obj.role = null;
+        obj.faction = null;
         sanitized.push(obj);
     }
     return sanitized;

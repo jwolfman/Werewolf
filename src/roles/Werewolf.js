@@ -30,7 +30,7 @@ var Werewolf = function () {
         }
     };
 
-    this.night = {werewolfKill : function(user, target) {
+    this.Night = {werewolfKill : function(user, target) {
             self.werewolfNominatedWho[user.name] = target.name;
             chat.emitToAwake("werewolf nominations", self.werewolfNominatedWho);
         }
