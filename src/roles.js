@@ -1,7 +1,7 @@
 //IMPORTANT: name and object identfier MUST MATCH! ROLE WILL BE undefined OTHERWISE!
 //Completion is meant for enabling actions
 var villager = require("./roles/villager.js");
-var werewolf = require("./roles/werewolf.js");
+var werewolf = require("./roles/Werewolf.js");
 
 var gameRoles = {
     Villager: villager.villager,
