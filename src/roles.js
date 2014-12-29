@@ -2,9 +2,11 @@
 //Completion is meant for enabling actions
 var villager = require("./roles/villager.js");
 var werewolf = require("./roles/werewolf.js");
+var seer = require("./roles/seer.js");
 
 var gameRoles = {
     Villager: villager.villager,
+    Seer: seer.seer,
     Werewolf: werewolf.werewolf
 };
 

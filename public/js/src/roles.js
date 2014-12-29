@@ -8,5 +8,10 @@ var roles = {
         name:"Villager",
         night:[],
         day:[]
-    }
+    },
+    Seer:{
+        name:"Werewolf",
+        night:[{action:"see", title:"See"}],
+        day:[]
+    },
 };

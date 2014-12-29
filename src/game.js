@@ -4,13 +4,13 @@ var chat = require("./chatServer.js");
 var main = require("../app.js");
 var roles = require("../src/roles.js").roles;
 var io = main.io;
-var roleDistribution = ["Villager", "Villager", "Villager", "Werewolf"];
+var roleDistribution = ["Villager", "Villager", "Villager", "Seer", "Werewolf"];
 var phaseMessage =  ["Night falls. Go to sleep.",  "The day begins. Discuss and nominate.",  "Voting begins. Pick from the nominees."]
 var phases = ["Night", "Day", "Voting"];
 var phasePos = 0; //Checks where in the phase list it is
 globals.currentPhase = phases[phasePos];
 var nightOrderPos = 0; //checks role for night order
-var nightOrder = [roles.Werewolf];
+var nightOrder = [roles.Werewolf, roles.Seer];
 var deathQueue = [];//Queue of people to activate ondeath.
 
 var dayEnd = false;
@@ -25,7 +25,9 @@ function initGame(){
     _.forEach(globals.players, function(p) {
         p.role = roles[roleDistribution[shuffledPos++]]; 
         p.socket.emit('role assigned', p.role.name);
+        p.dead = false;
     });
+    chat.updatePlayers();
     main.serverSocket.emit("start", JSON.stringify({key:globals.serverAuthKey}));
 }
 
@@ -39,7 +41,6 @@ function isWinner() {
     var factionList = ["Werewolves", "Village"];
     var factions  = _.groupBy(globals.players.filter(function(p) {return !p.dead;}), function(p) {return p.role.faction;});
     _.forEach(factionList, function(f) {if (!factions.hasOwnProperty(f)) {factions[f] = [];} });
-    console.log(factions);
     if (factions.Werewolves.length >= factions.Village.length) {
             winners.push("Werewolves");
     }

@@ -8,26 +8,18 @@ var game = require("./game.js");
 
 io.on('connection', function(socket){
   socket.on('disconnect', function(){
+        var dcer = _.find(globals.players, function(p) { return p.socket == socket;});
     if (gameRunning) {
-        for (var i = 0; i < globals.players.length; i++) {
-            if(socket == globals.players[i].socket) {
-                globals.players.splice(i, 1);
-                break;
-            }
-        }
+        dcer.dead = true;
     } else {
-        for (var i = 0; i < globals.players.length; i++) {
-            if(socket == globals.players[i].socket) {
-                globals.players[i].status = "Dead";
-            }
-        }
+        globals.players = _.without(globals.players, dcer);
     }
   });
 
   socket.on('user connect', function(nameParam) {
     globals.players.push(new user.User(nameParam, socket));
     io.sockets.emit('update users', JSON.stringify(sanitizedPlayersList()));
-    if(globals.players.length == game.roleDistribution.length) {
+    if(!gameRunning && globals.players.length == game.roleDistribution.length) {
         gameRunning=true;
         game.initGame(); 
     }
@@ -96,6 +88,18 @@ io.on('connection', function(socket){
         var evalObj = JSON.parse(obj);
         if (evalObj.key == globals.serverAuthKey) {
             game.repeatPhase();
+        }
+        else {
+            console.log("Incorrect server key used.");
+        }
+    });
+
+    socket.on("reset", function(obj) {
+        var evalObj = JSON.parse(obj);
+        if (evalObj.key == globals.serverAuthKey) {
+            sockets.emit("moderator message", "Server is restarting. Please refresh the browser.");
+            globals.players = [];
+            globals.currentPhase = "night";
         }
         else {
             console.log("Incorrect server key used.");

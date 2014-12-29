@@ -11,13 +11,11 @@ var Werewolf = function () {
         this[property] = template[property];
     }
     var self = this;
-    this.init = function() {showAllies();};
-    this.death = roleDefaults.defaultDeath;
+    this.init = function() {showAllies();};//TODO: Change to just noting who woke up.
     this.name = "Werewolf";
     this.faction = "Werewolves";
     this.waitTime = 9000;
-    this.allies = ["Werewolf"];
-    this.werewolfNominatedWho = {};
+    this.werewolfNominatedWho = {};//TODO:Refactor for genericism.
 
     this.completion = function() {
         var target = this.whoDidWerewolvesKill();
@@ -32,7 +30,7 @@ var Werewolf = function () {
 
     this.Night = {werewolfKill : function(user, target) {
             self.werewolfNominatedWho[user.name] = target.name;
-            chat.emitToAwake("werewolf nominations", self.werewolfNominatedWho);
+            chat.emitToAwake("targeted", self.werewolfNominatedWho);
         }
     };
 
