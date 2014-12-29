@@ -4,6 +4,8 @@ var players;
 var name;
 var nominated = [];
 
+document.addEventListener('keydown', function(event) {});
+
 function submitUsername() {
     name = $("#username-input").val();
     displayName=name;
