@@ -3,15 +3,16 @@ var role;
 var players;
 var name;
 var nominated = [];
+var busy=false;
 
 document.addEventListener('keydown', function(event) {});
 
 function submitUsername() {
     name = $("#username-input").val();
-    displayName=name;
-    socket.emit("getPlayers");
-    setTimeout(function(){},500);
-    var valid=true;
+    //setTimeout(function(){},500);
+    socket.emit("validate",name);
+}
+function validate(valid){
     if(typeof(players)!="undefined") {
         for (var c = 0; c < players.length; c++) {
             if (players[c].name.valueOf() == name.valueOf()) {
@@ -105,6 +106,11 @@ socket.on('role assigned', function(role) {
    $("#roleName").html("<h3 class=\""+role.team+"\">"+ role + "</h3> ");
 });
 
-socket.on("setPlayers",function(playerString){
-    players=JSON.parse(playerString);
+socket.on("reject name",function(){
+    $(".form-group").append("<span class=\'glyphicon glyphicon-remove-sign form-control-feedback\'></span>")
+    $(".form-group").addClass("has-error has-feedback");
+});
+socket.on("accept name",function(name){
+    socket.emit("user connect", name);
+    $("#username-dialog").hide();
 });

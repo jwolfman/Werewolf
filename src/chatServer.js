@@ -106,9 +106,20 @@ io.on('connection', function(socket){
         }
     });
 
-  socket.on("getPlayers",function(){
-        io.sockets.emit("setPlayers",JSON.stringify(sanitizedPlayersList()));
-    });
+  socket.on("validate",function(name){
+      var valid=true;
+      if(globals.findPlayerByName(name)!=undefined){
+          valid=false;
+      }
+      if(name===""){
+          valid=false;
+      }
+      if(valid) {
+          io.sockets.emit("accept name", name);
+      }else{
+          io.sockets.emit("reject name");
+      }
+  });
 
 });
 
