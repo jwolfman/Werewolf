@@ -47,6 +47,7 @@ var Werewolf = function () {
         self.werewolfNominatedWho = {};
         return _.invert(targets)[_.max(targets)];
     };
+    this.explanation="The Werewolves goal is to kill off all of the players not on their team. They wake up on the first night to learn the identities of their teammates and every night the Werewolves select a target to kill, beware that if you take too long you will fail to kill anybody in the night."
 };
 
 exports.werewolf = new Werewolf();

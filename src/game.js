@@ -24,7 +24,7 @@ function initGame(){
     var shuffledPos = 0;
     _.forEach(globals.players, function(p) {
         p.role = roles[roleDistribution[shuffledPos++]]; 
-        p.socket.emit('role assigned', p.role.name);
+        p.socket.emit('role assigned', p.role);
         p.dead = false;
     });
     chat.updatePlayers();

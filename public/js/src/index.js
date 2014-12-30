@@ -102,8 +102,10 @@ function doAction(action, target) {
 }
 
 socket.on('role assigned', function(role) {
-    console.log(role);
-   $("#roleName").html("<h3 class=\""+role.team+"\">"+ role + "</h3> ");
+    console.log(role.name);
+    $("#roleName").html("<h3 class=\""+role.faction+"\">"+role.name+ "</h3> ");
+    //$("#roleImage").html("<img src=\""+role.image+"\" class=\"img-rounded img-responsive\">");
+    $("#roleExplanation").html("<p>"+role.explanation+"</p>");
 });
 
 socket.on("reject name",function(){
