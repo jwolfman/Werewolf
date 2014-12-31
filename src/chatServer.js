@@ -27,7 +27,7 @@ io.on('connection', function(socket){
 
   socket.on('user chat message', function(message) {
     var user = _.find(globals.players, function(p) {return p.socket  == socket;});
-    if(user.awake && !user.silenced && !user.dead) {
+    if(user.awake && !user.silenced && ( !user.dead || !gameRunning)) {
         emitToAwake("chat message", JSON.parse(message));
     }
     else {
