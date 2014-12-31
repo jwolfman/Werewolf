@@ -24,6 +24,7 @@ var Seer = function () {
            var targets = _.map(self.targeted, function(name, user) {return globals.findPlayerByName(name);});
            _.each(targets, function(p) {chat.emitToAwake("moderator message", "This person is a member of faction " + p.role.faction);});
     };
+    this.explanation="Each night the Seer selects a player and is informed of said player's faction. The Seer is on the village team."
 };
 
 exports.seer = new Seer();
