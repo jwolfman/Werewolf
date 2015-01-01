@@ -1,0 +1,40 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/public/stylesheets/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/stylesheets/dist/fonts/glyphicons-halflings-regular.ttf">
+    <link rel="stylesheet" href="/public/stylesheets/login.css">
+    <script src="/public/js/lib/jquery.js"></script>
+    <script src="/public/js/lib/underscore-min.js"></script>
+    <script src="/public/js/lib/socket.js"></script>
+    <script src="/public/stylesheets/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container fixed">
+    <div class="col-xs-offset-3 col-xs-6">
+        <div id="logo" class="row">
+            <h1 class="col-xs-offset-2">Werewolf</h1>
+        </div>
+        <div id="loginForm" class="row">
+            <form>
+                <label for="inputUsername" class="sr-only">Username</label>
+                <input type="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            </form>
+        </div>
+        <div id="signup" class="row">
+            <button class="btn btn-lg btn-primary btn-block" type="signup">Sign up</button>
+        </div>
+        <div id="facebookSignIn" class="row">
+            <h2>Facebook integration soon™</h2>
+        </div>
+    </div>
+</div>
+</body>
+</html>

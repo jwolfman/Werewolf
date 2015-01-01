@@ -19,6 +19,10 @@ app.get("/moderator",function(req,res){
     res.render("moderator.ejs", {roles:roleModule.gameRoles });
 });
 
+app.get("/login",function(req,res){
+    res.render("login.ejs");
+});
+
 app.post('/moderator', strBodyParser, function(req, res) {
     game.roleDistribution = [];
     roles = Object.keys(req.body)

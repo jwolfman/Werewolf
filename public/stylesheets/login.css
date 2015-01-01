@@ -1,0 +1,8 @@
+@font-face{
+    font-family: "Lycanthrope";/*Title font, if used send info about the project to savage@sinistervisions.com because they'd like to know*/
+    src:url("/public/fonts/lycanthrope/Lycanthrope.ttf");
+}
+#logo h1{
+    font-family: "Lycanthrope";
+    font-size: 5em;
+}
