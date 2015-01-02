@@ -4,7 +4,7 @@ var chat = require("./chatServer.js");
 var main = require("../app.js");
 var roles = require("../src/roles.js").roles;
 var io = main.io;
-var roleDistribution = ["Villager", "Villager", "Bodyguard", "Seer", "Werewolf"];
+var roleDistribution = ["Villager", "Villager", "Bodyguard", "Seer", "Hunter", "Werewolf"];
 var phaseMessage =  ["Night falls. Go to sleep.",  "The day begins. Discuss and nominate.",  "Voting begins. Pick from the nominees."];
 var phases = ["Night", "Day", "Voting"];
 var phasePos = 0; //Checks where in the phase list it is
@@ -57,13 +57,23 @@ exports.startGame = function() {
 
 exports.advance = function() {
     if (deathQueue.length > 0) {
-            chat.updatePlayers();
-    //     globals.currentPhase = death;
-    //     var next = deathQueue.pop();
-    //     next.apply();
-    //     announce deaths
-    //     emit advance.
-    //     return
+        chat.updatePlayers();
+        globals.currentPhase = "Death";
+        var next = deathQueue.pop();
+        next.awake = true;
+        if (next.role.deathApply != null) {
+            io.sockets.emit("moderator message", next.role.name + " do your thing.");
+            setTimeout(function() {
+                next.dead = true;
+                next.awake = false;
+                next.role.deathApply(next);
+                main.serverSocket.emit("announce deaths", JSON.stringify({key:globals.serverAuthKey}));
+            }, next.role.waitTime);
+        }
+        else {
+            main.serverSocket.emit("advance", JSON.stringify({key:globals.serverAuthKey}))
+        }
+        return;
     }
     var winners = isWinner();
     if (winners.length > 0) {

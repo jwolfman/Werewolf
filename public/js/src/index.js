@@ -58,7 +58,9 @@ function roleMenuString(phase) {
     actions = [{action:"nominate", title:"Nominate" }, {action:"vote", title:"Vote" }];
     // } 
     if (role != undefined) {
-        actions = actions.concat(role.day.concat(role.night));
+        actions = actions.concat(role.day);
+        actions = actions.concat(role.night);
+        actions = actions.concat(role.deathActions);
     }
      for (var i = 0; i < actions.length; i++) {
          //$TARGET gets replaced with the user when it gets integrated with the action

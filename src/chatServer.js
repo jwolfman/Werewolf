@@ -48,7 +48,7 @@ io.on('connection', function(socket){
      var target = _.find(globals.players, function(p) {return p.name == actionPost.target;});
      //This expr is evaluated before the if for the purpose of 
      try {
-        var allowed = !user.dead && user.awake && user.role[globals.currentPhase].hasOwnProperty(actionPost.action);
+        var allowed = (!user.dead || globals.currentPhase === "Death") && user.awake && user.role[globals.currentPhase].hasOwnProperty(actionPost.action);
     } catch (err) {
         console.log(err);
         allowed = false; 
