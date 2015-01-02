@@ -16,12 +16,19 @@ io.on('connection', function(socket){
     }
   });
 
-  socket.on('user connect', function(nameParam) {
-    globals.players.push(new user.User(nameParam, socket));
-    io.sockets.emit('update users', JSON.stringify(sanitizedPlayersList()));
-    if(!gameRunning && globals.players.length == game.roleDistribution.length) {
-        gameRunning=true;
-        game.initGame(); 
+  socket.on('validate name', function(nameParam) {
+    var match = _.find(globals.players, function(p) {return p.name === nameParam;});
+    if (match === undefined) {
+            socket.emit('validated name');
+            globals.players.push(new user.User(nameParam, socket));
+            io.sockets.emit('update users', JSON.stringify(sanitizedPlayersList()));
+            if(!gameRunning && globals.players.length == game.roleDistribution.length) {
+                gameRunning=true;
+                game.initGame(); 
+            }
+        }
+    else {
+        socket.emit('rejected name');
     }
   });
 

@@ -33,6 +33,7 @@ var Werewolf = function () {
             chat.emitToAwake("targeted", self.werewolfNominatedWho);
         }
     };
+    this.night = [{action:"werewolfKill", title:"Kill"}];
 
     this.whoDidWerewolvesKill = function() {
         var targets = {};

@@ -9,25 +9,7 @@ document.addEventListener('keydown', function(event) {});
 
 function submitUsername() {
     name = $("#username-input").val();
-    //setTimeout(function(){},500);
-    socket.emit("validate",name);
-}
-function validate(valid){
-    if(typeof(players)!="undefined") {
-        for (var c = 0; c < players.length; c++) {
-            if (players[c].name.valueOf() == name.valueOf()) {
-                valid = false;
-            }
-        }
-    }
-    if(name===""){
-        valid=false;
-    }
-    if(valid) {
-        socket.emit('user connect', name);
-        //TODO: Check if it's valid name!
-        $("#username-dialog").hide();
-    }
+    socket.emit("validate name",name);
 }
 
 function sendMessage (){
@@ -47,7 +29,6 @@ socket.on('update users', function(playerString) {
     players = JSON.parse(playerString);
     $("#userEntries").empty();
     nominated = _.unique(_.map(players, function(p) {return p.nominated;}));
-    console.log(nominated);
     nominated = nominated.filter(function(item) {return !(item === undefined || item === null);});
     var menuStr = roleMenuString();
     for (var i = 0; i < players.length; i++) {
@@ -58,8 +39,9 @@ socket.on('update users', function(playerString) {
 });
 
 socket.on('role assigned', function(r) {
-    role = roles[r];
-    $("#roleName").html("<h3>"+ r + "</h3> ");
+    role = r;
+    $("#roleName").html("<h3 class=\""+role.faction+"\">"+role.name+ "</h3> ");
+    $("#roleExplanation").html("<p>"+role.explanation+"</p>");
     var menuStr = roleMenuString();
     $("#userEntries").empty();
     for (var i = 0; i < players.length; i++) {
@@ -101,18 +83,12 @@ function doAction(action, target) {
     socket.emit("action", JSON.stringify(actionpost));
 }
 
-socket.on('role assigned', function(role) {
-    console.log(role.name);
-    $("#roleName").html("<h3 class=\""+role.faction+"\">"+role.name+ "</h3> ");
-    //$("#roleImage").html("<img src=\""+role.image+"\" class=\"img-rounded img-responsive\">");
-    $("#roleExplanation").html("<p>"+role.explanation+"</p>");
-});
 
-socket.on("reject name",function(){
+socket.on("rejected name",function(){
     $(".form-group").append("<span class=\'glyphicon glyphicon-remove-sign form-control-feedback\'></span>")
     $(".form-group").addClass("has-error has-feedback");
 });
-socket.on("accept name",function(name){
-    socket.emit("user connect", name);
+
+socket.on("validated name",function(name){
     $("#username-dialog").hide();
 });

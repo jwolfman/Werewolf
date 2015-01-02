@@ -14,6 +14,8 @@ var Villager = function() {
     this.wakeUp = roleDefaults.defaultWake;
     this.sleep = roleDefaults.defaultSleep;
     this.explanation="The Villager's sole purpose is to find the Werewolves in the village and lynch them during the day.";
+    this.night = [];
+    this.day = [];
 };
 
 exports.villager = new Villager();

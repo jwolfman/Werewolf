@@ -4,13 +4,13 @@ var chat = require("./chatServer.js");
 var main = require("../app.js");
 var roles = require("../src/roles.js").roles;
 var io = main.io;
-var roleDistribution = ["Villager", "Villager", "Villager", "Seer", "Werewolf"];
-var phaseMessage =  ["Night falls. Go to sleep.",  "The day begins. Discuss and nominate.",  "Voting begins. Pick from the nominees."]
+var roleDistribution = ["Villager", "Villager", "Bodyguard", "Seer", "Werewolf"];
+var phaseMessage =  ["Night falls. Go to sleep.",  "The day begins. Discuss and nominate.",  "Voting begins. Pick from the nominees."];
 var phases = ["Night", "Day", "Voting"];
 var phasePos = 0; //Checks where in the phase list it is
 globals.currentPhase = phases[phasePos];
 var nightOrderPos = 0; //checks role for night order
-var nightOrder = [roles.Werewolf, roles.Seer];
+var nightOrder = [roles.Bodyguard, roles.Werewolf, roles.Seer];
 var deathQueue = [];//Queue of people to activate ondeath.
 
 var dayEnd = false;
@@ -146,8 +146,6 @@ var countVotes = function () {
     }
 };
 
-
-
 var runFirstNight = function () {
     //Add code when first round roles are introduced.
     //advance phase
@@ -159,10 +157,6 @@ var deactivateRole = function(role) {
     io.sockets.emit('moderator message', role.name + ", go to sleep!");
     _.forEach(playersWithRole, function(p) {p.role.sleep(p);});
 };
-
-function getMembersOfTeam(team) {
-    return 
-}
 
 exports.roleDistribution = roleDistribution;
 exports.initGame = initGame;
