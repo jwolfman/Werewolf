@@ -9,7 +9,12 @@ exports.defaultDeath = function(target) {
     target.faction = "dead";
 };
 
-exports.defaultSleep = function (p) {p.nominated = ""; p.votedFor = "";  p.awake = false; p.silenced = false;};
+exports.defaultSleep = function (p) {
+    p.nominated = ""; 
+    p.votedFor = ""; 
+    p.awake = false; 
+    p.silenced = false;
+};
 exports.defaultWake = function (p) {p.awake = true; p.silenced = false;};
 
 exports.defaultDay ={

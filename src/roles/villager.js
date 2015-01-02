@@ -16,6 +16,8 @@ var Villager = function() {
     this.explanation="The Villager's sole purpose is to find the Werewolves in the village and lynch them during the day.";
     this.night = [];
     this.day = [];
+    this.deathApply = null;
+    this.deathActions = [];
 };
 
 exports.villager = new Villager();
