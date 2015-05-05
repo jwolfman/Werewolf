@@ -3,9 +3,9 @@
     <link rel="stylesheet" href="/public/stylesheets/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/public/stylesheets/dist/fonts/glyphicons-halflings-regular.ttf">
     <link rel="stylesheet" href="/public/stylesheets/login.css">
-    <script src="/public/js/lib/jquery.js"></script>
-    <script src="/public/js/lib/underscore-min.js"></script>
-    <script src="/public/js/lib/socket.js"></script>
+    <script src="/public/js/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/public/js/lib/underscore/underscore-min.js"></script>
+    <script src="/public/js/lib/socketio-client/socket.io.js"></script>
     <script src="/public/stylesheets/dist/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -16,10 +16,8 @@
         </div>
         <div id="loginForm" class="row">
             <form>
-                <label for="inputUsername" class="sr-only">Username</label>
-                <input type="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <input type="username" id="inputUsername" class="form-control">
+                <input type="password" id="inputPassword" class="form-control">
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me

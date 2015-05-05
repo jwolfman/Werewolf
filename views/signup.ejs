@@ -1,0 +1,32 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/public/stylesheets/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/stylesheets/dist/fonts/glyphicons-halflings-regular.ttf">
+    <link rel="stylesheet" href="/public/stylesheets/login.css">
+    <script src="/public/js/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/public/js/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/public/js/lib/jquery-form/jquery.form.js"></script>
+    <script src="/public/js/lib/underscore/underscore-min.js"></script>
+    <script src="/public/stylesheets/dist/js/bootstrap.min.js"></script>
+    <script src="/public/js/src/signup.js"></script>
+</head>
+<body>
+<div class="container fixed">
+    <div class="col-xs-offset-3 col-xs-6">
+        <div id="logo" class="row">
+            <h1 class="col-xs-offset-2">Werewolf</h1>
+        </div>
+        <div id="loginForm">
+            <form id="signupForm" action="/signup" method="post">
+                <input type="text" name="username" id="username" class="form-control" value="Username" placeholder="Username" />
+                <input type="password" name="password" id="password" class="form-control" value="Password" placeholder="Password" />
+                <input type="password" name="passConfirm" id="passConfirm" class="form-control" placeholder="Confirm Password" />
+                <input type="text" name="email" id="email" class="form-control" placeholder="Email (Optional)"/>
+                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign Up"/>
+            </form>
+          <% if ( error !== undefined ) { error }%>
+        </div>
+    </div>
+</div>
+</body>
+</html>
